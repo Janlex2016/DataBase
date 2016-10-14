@@ -1,0 +1,21 @@
+# Maven
+target
+war
+# Idea
+*.iml
+.idea/
+
+# JRebel
+rebel.xml
+
+# Eclipse
+**/.settings/
+**/.project
+**/.classpath
+
+# Others
+*.class
+*.jar
+*.log
+*.log~
+*.ear

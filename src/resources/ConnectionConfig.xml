@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config>
+    <URL>jdbc:mysql://localhost:3306/VotingDataBase</URL>
+    <login>root</login>
+    <password></password>
+</config>    
