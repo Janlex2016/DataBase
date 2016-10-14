@@ -31,5 +31,6 @@ public class Converter {
         if(!rs.next()) return null;
         return new Votion(rs.getInt("id"),rs.getString("title"));
     }
-}
+
+ }
 

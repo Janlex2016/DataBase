@@ -18,8 +18,6 @@ import java.sql.SQLException;
 
 public class CandidateAddFrame extends BaseAddFrame {
 
-    private UserService userService = ServiceFactory.getUserService();
-    private VotingService votingService = ServiceFactory.getVotingService();
     private int votingId;
     private static final String titleText = "Add candidate to voting";
     private javax.swing.JList candidateList;

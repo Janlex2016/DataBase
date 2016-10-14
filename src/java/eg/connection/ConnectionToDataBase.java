@@ -43,4 +43,9 @@ public final class ConnectionToDataBase {
         int result = statement.executeUpdate(insertQuery);
         return result;
     }
+
+    public ResultSet insertText(String text) throws SQLException {
+        ResultSet rs = statement.executeQuery(text);
+        return rs;
+    }
 }

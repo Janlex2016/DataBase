@@ -56,4 +56,14 @@ public class ListConverter {
         }
         return list;
     }
+
+    public static List<String> convertResultSetToTableArray(ResultSet rs) throws SQLException {
+        List<String> tableNameList = new ArrayList<>();
+        if(!rs.first()) return null;
+        rs.previous();
+        while(rs.next()){
+            tableNameList.add(rs.getString("Tables_in_VotingDataBase"));
+        }
+        return tableNameList;
+    }
 }

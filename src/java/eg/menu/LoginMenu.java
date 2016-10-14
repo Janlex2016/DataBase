@@ -1,6 +1,8 @@
 package eg.menu;
 
+import eg.dataBaseCheck.DataBaseCheck;
 import eg.exceptions.ListIsEmpty;
+import eg.exceptions.TablesDoNotExist;
 import eg.exceptions.UserNotFound;
 
 import java.awt.*;
@@ -50,7 +52,16 @@ public class LoginMenu extends BaseMenuFrame implements ActionListener {
         container.add(exitButton);
         container.add(enterButton);
 
-        this.setAlwaysOnTop(true);
+        try {
+            System.out.println("check begun");
+            DataBaseCheck dataBaseCheck = new DataBaseCheck();
+        } catch (SQLException e) {
+            showMessage(e.getMessage(), inputErrorText);
+        } catch (TablesDoNotExist tablesDoNotExist) {
+            showMessage(tablesDoNotExist.getMessage(), inputErrorText);
+        }
+
+//        this.setAlwaysOnTop(true);
         this.setVisible(true);
     }
 

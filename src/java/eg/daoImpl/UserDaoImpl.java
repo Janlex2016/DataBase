@@ -18,7 +18,7 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public void add(User user) throws SQLException {
-        String input = String.format("INSERT INTO Users (id, name, login, password, access) VALUES ('%1$d','%2$s', '%3$s', '%4$s', '%5$s');",user.getId(),user.getName(),user.getLogin(),user.getPassword(),String.valueOf(user.getAccess()));
+        String input = String.format("INSERT INTO USERS (id, name, login, password, access) VALUES ('%1$d','%2$s', '%3$s', '%4$s', '%5$s');",user.getId(),user.getName(),user.getLogin(),user.getPassword(),String.valueOf(user.getAccess()));
         ConnectionToDataBase.getConnection().insert(input);
 //        ConnectionToDataBase.getConnection().insert("INSERT INTO Users (id, name, login, password, access) VALUES ('"+user.getId()+"','"+user.getName()+"', '"+user.getLogin()+"', '"+user.getPassword()+"', '"+String.valueOf(user.getAccess())+"');");
     }
@@ -26,7 +26,7 @@ public class UserDaoImpl implements UserDao{
     @Override
     public boolean deleteById(int id) throws SQLException{
         if(getById(id)==null) return false;
-        String input = String.format("DELETE FROM Users WHERE id=%1$d", id);
+        String input = String.format("DELETE FROM USERS WHERE id=%1$d", id);
         ConnectionToDataBase.getConnection().insert(input);
 //        ConnectionToDataBase.getConnection().insert("DELETE FROM Users WHERE id='"+id+"'");
         return true;
@@ -43,7 +43,7 @@ public class UserDaoImpl implements UserDao{
     public boolean deleteByName(String name) throws SQLException{
         
         if(getByName(name)==null) return false;
-        String input = String.format("DELETE FROM Users WHERE name='%1$s", name);
+        String input = String.format("DELETE FROM USERS WHERE name='%1$s", name);
         ConnectionToDataBase.getConnection().insert(input);   
 //        ConnectionToDataBase.getConnection().insert("DELETE FROM Users WHERE name='"+name+"'");   
         return true;
@@ -51,7 +51,7 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public User getById(int id) throws SQLException{
-        String input = String.format("Users WHERE id='%1$d'", id);
+        String input = String.format("USERS WHERE id='%1$d'", id);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("Users WHERE id='"+id+"'");
         return Converter.convertResultSetToUser(rs);
@@ -59,7 +59,7 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public User getByName(String name) throws SQLException{
-        String input = String.format("Users WHERE name='%1$s'", name);
+        String input = String.format("USERS WHERE name='%1$s'", name);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("Users WHERE name='"+name+"'");
         return Converter.convertResultSetToUser(rs);
@@ -67,13 +67,13 @@ public class UserDaoImpl implements UserDao{
     
     @Override
     public List<User> getAll() throws SQLException {
-        ResultSet rs = ConnectionToDataBase.getConnection().query("Users");
+        ResultSet rs = ConnectionToDataBase.getConnection().query("USERS");
         return ListConverter.convertResultSetToUserList(rs);
     }
 
     @Override
     public List<User> getUsersByAccess(String access) throws SQLException {
-        String input = String.format("Users WHERE access='%1$s'", access);
+        String input = String.format("USERS WHERE access='%1$s'", access);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("Users WHERE access='"+access+"'");
         return ListConverter.convertResultSetToUserList(rs);
@@ -81,7 +81,7 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public User enter(String login, String password) throws SQLException {
-        String input = String.format("Users WHERE login='%1$s' AND password='%2$s'", login,password);
+        String input = String.format("USERS WHERE login='%1$s' AND password='%2$s'", login,password);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("Users WHERE login='"+login+"' AND password='"+password+"'");
         return Converter.convertResultSetToUser(rs);
