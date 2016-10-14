@@ -18,7 +18,7 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public void add(User user) throws SQLException {
-        String input = String.format("INSERT INTO USERS (id, name, login, password, access) VALUES ('%1$d','%2$s', '%3$s', '%4$s', '%5$s');",user.getId(),user.getName(),user.getLogin(),user.getPassword(),String.valueOf(user.getAccess()));
+        String input = String.format("INSERT INTO USERS (ID, NAME, LOGIN, PASSWORD, ACCESS) VALUES ('%1$d','%2$s', '%3$s', '%4$s', '%5$s');",user.getId(),user.getName(),user.getLogin(),user.getPassword(),String.valueOf(user.getAccess()));
         ConnectionToDataBase.getConnection().insert(input);
 //        ConnectionToDataBase.getConnection().insert("INSERT INTO Users (id, name, login, password, access) VALUES ('"+user.getId()+"','"+user.getName()+"', '"+user.getLogin()+"', '"+user.getPassword()+"', '"+String.valueOf(user.getAccess())+"');");
     }
@@ -26,7 +26,7 @@ public class UserDaoImpl implements UserDao{
     @Override
     public boolean deleteById(int id) throws SQLException{
         if(getById(id)==null) return false;
-        String input = String.format("DELETE FROM USERS WHERE id=%1$d", id);
+        String input = String.format("DELETE FROM USERS WHERE ID=%1$d", id);
         ConnectionToDataBase.getConnection().insert(input);
 //        ConnectionToDataBase.getConnection().insert("DELETE FROM Users WHERE id='"+id+"'");
         return true;
@@ -35,7 +35,7 @@ public class UserDaoImpl implements UserDao{
     @Override
     public boolean deleteCandidateById(int id) throws SQLException{
         ConnectionToDataBase.getConnection().insert("SET SQL_SAFE_UPDATES = 0;\n" +
-            "DELETE Users, VotionTab FROM Users, VotionTab WHERE Users.id = VotionTab.CandidateId AND Users.id ="+id);
+            "DELETE USERS, VOTING_CANDIDATES FROM USERS, VOTING_CANDIDATES WHERE USERS.ID = VOTING_CANDIDATES.CANDIDATE_ID AND USERS.ID ="+id);
         return true;
     }
     
@@ -51,7 +51,7 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public User getById(int id) throws SQLException{
-        String input = String.format("USERS WHERE id='%1$d'", id);
+        String input = String.format("USERS WHERE ID='%1$d'", id);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("Users WHERE id='"+id+"'");
         return Converter.convertResultSetToUser(rs);

@@ -24,7 +24,7 @@ public class VotingDaoImpl implements VotingDao {
 
     @Override
     public void add(Votion votion) throws SQLException {
-        String input = String.format("INSERT INTO Votion (id, title) VALUES ('%1$d','%2$s');", votion.getId(), votion.getTitle());
+        String input = String.format("INSERT INTO VOTING (ID, TITLE) VALUES ('%1$d','%2$s');", votion.getId(), votion.getTitle());
         ConnectionToDataBase.getConnection().insert(input);
 //        ConnectionToDataBase.getConnection().insert("INSERT INTO Votion (id, title) VALUES ('"+votion.getId()+"','"+votion.getTitle()+"');");
     }
@@ -32,20 +32,20 @@ public class VotingDaoImpl implements VotingDao {
     @Override
     public boolean deleteById(int id) throws SQLException {
         ConnectionToDataBase.getConnection().insert("SET SQL_SAFE_UPDATES = 0;\n" +
-            "DELETE Votion, VotionTab FROM Votion, VotionTab WHERE Votion.id = VotionTab.VotionId AND Votion.id = "+id+"");
+            "DELETE VOTING, VOTING_CANDIDATES FROM VOTING, VOTING_CANDIDATES WHERE VOTING.ID = VOTING_CANDIDATES.VOTING_ID AND VOTING.ID = "+id+"");
         return true;
     }
 
     @Override
     public void addCandidateToVotion(History v) throws SQLException {
-        String input = String.format("INSERT INTO VotionTab (id, CandidateId, VotionId) VALUES ('%1$d','%2$d' , '%3$d');",v.getHistoryId(),v.getCandidateId(),v.getVotionId());
+        String input = String.format("INSERT INTO VOTING_CANDIDATES (ID, CANDIDATE_ID, VOTING_ID) VALUES ('%1$d','%2$d' , '%3$d');",v.getHistoryId(),v.getCandidateId(),v.getVotionId());
         ConnectionToDataBase.getConnection().insert(input);    
 //        ConnectionToDataBase.getConnection().insert("INSERT INTO VotionTab (id, CandidateId, VotionId) VALUES ('"+v.getHistoryId()+"','"+v.getCandidateId()+"' , '"+v.getVotionId()+"');");    
     }
     
     @Override
     public Votion getById(int id) throws SQLException{
-        String input = String.format("Votion WHERE id='%1$d'", id);
+        String input = String.format("VOTING WHERE ID='%1$d'", id);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("Votion WHERE id='"+id+"'");
         return Converter.convertResultSetToVotion(rs);
@@ -53,7 +53,7 @@ public class VotingDaoImpl implements VotingDao {
     
     @Override
     public Votion getByName(String name) throws SQLException{
-        String input = String.format("Votion WHERE title='%1$s'", name);
+        String input = String.format("VOTING WHERE TITLE='%1$s'", name);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("Votion WHERE title='"+name+"'");
         return Converter.convertResultSetToVotion(rs);
@@ -61,7 +61,7 @@ public class VotingDaoImpl implements VotingDao {
 
     @Override
     public List<Votion> getAll() throws SQLException {
-        ResultSet rs = ConnectionToDataBase.getConnection().query("Votion");
+        ResultSet rs = ConnectionToDataBase.getConnection().query("VOTING");
         return ListConverter.convertResultSetToVotionList(rs);
     }
 
@@ -72,7 +72,7 @@ public class VotingDaoImpl implements VotingDao {
     
     @Override
     public List<History> getVotionWithCandidatesList(int votionId) throws SQLException {
-        String input = String.format("VotionTab WHERE VotionId='%1$d'", votionId);
+        String input = String.format("VOTING_CANDIDATES WHERE VOTING_ID='%1$d'", votionId);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("VotionTab WHERE VotionId='"+votionId+"'");
         return ListConverter.convertResultSetToVotionWithCandidatesList(rs);
@@ -80,12 +80,12 @@ public class VotingDaoImpl implements VotingDao {
     
     @Override
     public void deleteCandidateById(int id) throws SQLException {
-        String input = String.format("DELETE FROM VotionTab WHERE CandidateId=%1$d", id);
+        String input = String.format("DELETE FROM VOTING_CANDIDATES WHERE CANDIDATE_ID=%1$d", id);
         ConnectionToDataBase.getConnection().insert(input); 
     }
 
     @Override
     public void deleteCandidateFromVotion(int candidateId, int votionId) throws SQLException {
-        String input = String.format("DELETE FROM VotionTab WHERE CandidateId=%1$d AND VotionId=%2$d",candidateId, votionId);
+        String input = String.format("DELETE FROM VOTING_CANDIDATES WHERE CANDIDATE_ID=%1$d AND VOTING_ID=%2$d",candidateId, votionId);
         ConnectionToDataBase.getConnection().insert(input);      }
 }
