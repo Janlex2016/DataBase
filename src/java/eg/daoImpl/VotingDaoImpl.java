@@ -7,7 +7,7 @@ package eg.daoImpl;
 
 import eg.connection.ConnectionToDataBase;
 import eg.dao.VotingDao;
-import eg.models.Votion;
+import eg.models.Voting;
 import eg.converters.Converter;
 import eg.converters.ListConverter;
 import eg.models.History;
@@ -19,9 +19,9 @@ import java.util.List;
 public class VotingDaoImpl implements VotingDao {
 
     @Override
-    public void add(Votion votion) throws SQLException {
+    public void add(Voting voting) throws SQLException {
         //TODO Check id
-        String input = String.format("INSERT INTO VOTING (TITLE) VALUES ('%1$s');", votion.getTitle());
+        String input = String.format("INSERT INTO VOTING (TITLE) VALUES ('%1$s');", voting.getTitle());
         ConnectionToDataBase.getConnection().insert(input);
 //        ConnectionToDataBase.getConnection().insert("INSERT INTO Votion (id, title) VALUES ('"+votion.getId()+"','"+votion.getTitle()+"');");
     }
@@ -34,14 +34,14 @@ public class VotingDaoImpl implements VotingDao {
     }
 
     @Override
-    public void addCandidateToVotion(History v) throws SQLException {
+    public void addCandidateToVoting(History v) throws SQLException {
         String input = String.format("INSERT INTO VOTING_CANDIDATES (ID, CANDIDATE_ID, VOTING_ID) VALUES ('%1$d','%2$d' , '%3$d');",v.getHistoryId(),v.getCandidateId(),v.getVotionId());
         ConnectionToDataBase.getConnection().insert(input);    
 //        ConnectionToDataBase.getConnection().insert("INSERT INTO VotionTab (id, CandidateId, VotionId) VALUES ('"+v.getHistoryId()+"','"+v.getCandidateId()+"' , '"+v.getVotionId()+"');");    
     }
     
     @Override
-    public Votion getById(int id) throws SQLException{
+    public Voting getUserById(int id) throws SQLException{
         String input = String.format("VOTING WHERE ID='%1$d'", id);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("Votion WHERE id='"+id+"'");
@@ -49,7 +49,7 @@ public class VotingDaoImpl implements VotingDao {
     }
     
     @Override
-    public Votion getByName(String name) throws SQLException{
+    public Voting getByName(String name) throws SQLException{
         String input = String.format("VOTING WHERE TITLE='%1$s'", name);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("Votion WHERE title='"+name+"'");
@@ -57,19 +57,19 @@ public class VotingDaoImpl implements VotingDao {
     }
 
     @Override
-    public List<Votion> getAll() throws SQLException {
+    public List<Voting> getAll() throws SQLException {
         ResultSet rs = ConnectionToDataBase.getConnection().query("VOTING");
         return ListConverter.convertResultSetToVotionList(rs);
     }
 
     @Override
-    public void addCandidateList(Votion votion ,List<User> list) throws SQLException {
-        votion.setCandidateIds(list);
+    public void addCandidateList(Voting voting,List<User> list) throws SQLException {
+        voting.setCandidateIds(list);
     }
     
     @Override
-    public List<History> getVotingWithCandidatesList(int votionId) throws SQLException {
-        String input = String.format("VOTING_CANDIDATES WHERE VOTING_ID='%1$d'", votionId);
+    public List<History> getVotingWithCandidatesList(int votingId) throws SQLException {
+        String input = String.format("VOTING_CANDIDATES WHERE VOTING_ID='%1$d'", votingId);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("VotionTab WHERE VotionId='"+votionId+"'");
         return ListConverter.convertResultSetToVotingWithCandidatesList(rs);

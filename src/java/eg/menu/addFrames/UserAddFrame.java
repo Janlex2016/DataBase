@@ -45,16 +45,7 @@ public class UserAddFrame extends BaseAddFrame {
     }
 
     private void accessComboBoxActionPerformed(java.awt.event.ActionEvent evt) {
-
         accessComboBoxSelectedItem = (String) accessComboBox.getModel().getSelectedItem();
-
-        if (accessComboBoxSelectedItem.equals(Access.CANDIDATE.name())) {
-            loginTextField.setEnabled(false);
-            passwordTextField.setEnabled(false);
-        } else {
-            loginTextField.setEnabled(true);
-            passwordTextField.setEnabled(true);
-        }
     }
 
     public UserAddFrame() {
@@ -105,7 +96,6 @@ public class UserAddFrame extends BaseAddFrame {
                 new javax.swing.DefaultComboBoxModel(
                         new String[]{
                                 Access.USER.name(),
-                                Access.CANDIDATE.name(),
                                 Access.ADMIN.name(),
                         }));
         accessComboBox.addActionListener(new java.awt.event.ActionListener() {

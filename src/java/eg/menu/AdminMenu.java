@@ -8,14 +8,10 @@ package eg.menu;
 import eg.exceptions.AccessDenied;
 import eg.exceptions.CandidateNotFound;
 import eg.exceptions.HistoryNotFound;
-import eg.menu.addFrames.UserAddFrame;
+import eg.menu.addFrames.*;
 import eg.exceptions.ListIsEmpty;
 import eg.exceptions.UserNotFound;
 import eg.exceptions.VotingNotFound;
-import eg.menu.addFrames.CandidateAddFrame;
-import eg.menu.addFrames.HistoryAddFrame;
-import eg.menu.addFrames.ResultFrame;
-import eg.menu.addFrames.VotingAddFrame;
 import eg.models.History;
 import eg.models.User;
 
@@ -32,7 +28,7 @@ public class AdminMenu extends BaseMenuFrame {
 //    private VotingService votingService = ServiceFactory.getVotingService();
 
     private String title;
-    private String votionTitle;
+    private String votingTitle;
     private String candidateName;
 
     public AdminMenu(User currentUser) throws SQLException, ListIsEmpty {
@@ -47,7 +43,7 @@ public class AdminMenu extends BaseMenuFrame {
 
     private void resultsButtonActionPerformed(java.awt.event.ActionEvent evt) {
 
-        if (title.equals("Votions") && votionTitle.equals("*All*")) {
+        if (title.equals("Votions") && votingTitle.equals("*All*")) {
                 try {
 
 
@@ -77,21 +73,24 @@ public class AdminMenu extends BaseMenuFrame {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {
         switch (title) {
             case "Users":
-                userAddFrame = new UserAddFrame();
+                new UserAddFrame();
+                break;
+            case "Candidates":
+                new CandidateAddFrame();
                 break;
             case "History":
                 new HistoryAddFrame().setVisible(true);
                 break;
             case "Votions":
-                if (votionTitle.equals("*All*")) {
+                if (votingTitle.equals("*All*")) {
                     new VotingAddFrame().setVisible(true);
                     break;
                 } else
                     try {
-                        new CandidateAddFrame(votingService.getByName(votionTitle).getId());
+                        new CandidateToVotingAddFrame(votingService.getByName(votingTitle).getId());
                     } catch (VotingNotFound | UserNotFound | SQLException ex) {
                         System.out.println(ex);
-                        System.out.println(votionTitle);
+                        System.out.println(votingTitle);
                     }
                 break;
             default:
@@ -131,7 +130,7 @@ public class AdminMenu extends BaseMenuFrame {
                 break;
             }
             case "Votions": {
-                if (votionTitle.equals("*All*")) {
+                if (votingTitle.equals("*All*")) {
                     try {
                         candidateName = jList1.getSelectedValue().toString();
                         int t = candidateName.indexOf(" ");
@@ -145,7 +144,7 @@ public class AdminMenu extends BaseMenuFrame {
                 } else {
                     try {
                         candidateName = jList1.getSelectedValue().toString();
-                        votingService.deleteCandidateFromVotion(userService.getCandidateByName(candidateName).getId(), votingService.getByName(votionTitle).getId());
+                        votingService.deleteCandidateFromVotion(userService.getCandidateByName(candidateName).getId(), votingService.getByName(votingTitle).getId());
                         JOptionPane.showMessageDialog(null, "Done!", "Output", JOptionPane.PLAIN_MESSAGE);
                     } catch (SQLException | VotingNotFound | UserNotFound | AccessDenied | CandidateNotFound ex) {
                         JOptionPane.showMessageDialog(null, ex.getMessage(), "Output", JOptionPane.PLAIN_MESSAGE);
@@ -155,7 +154,7 @@ public class AdminMenu extends BaseMenuFrame {
                 }
             }
         }
-        if(votionComboBox.isEnabled()) updateVoting();
+        if(votingComboBox.isEnabled()) updateVoting();
         else update();
     }
 
@@ -163,14 +162,15 @@ public class AdminMenu extends BaseMenuFrame {
 
     }
 
-    private void UCVComboBoxActionPerformed(java.awt.event.ActionEvent evt) {
+    private void UCHVComboBoxActionPerformed(java.awt.event.ActionEvent evt) {
 
         title = (String) UCVComboBox.getModel().getSelectedItem();
-        System.out.println("kkuhkj");
         switch (title) {
             case "Users": {
+                votingComboBox.setVisible(false);
+
                 try {
-                    votionComboBox.setEnabled(false);
+                    votingComboBox.setEnabled(false);
                     jList1.setModel(new javax.swing.AbstractListModel() {
                         String[] strings = userService.getUserArray();
 
@@ -182,8 +182,42 @@ public class AdminMenu extends BaseMenuFrame {
                             return strings[i];
                         }
                     });
-                    votionComboBox.setModel(new javax.swing.DefaultComboBoxModel());
-                    votionComboBox.setEnabled(false);
+                    votingComboBox.setModel(new javax.swing.DefaultComboBoxModel());
+                    votingComboBox.setEnabled(false);
+                    break;
+                } catch (NullPointerException | ListIsEmpty | SQLException e) {
+                    jList1.setModel(new javax.swing.AbstractListModel() {
+                        String[] strings = {""};
+
+                        public int getSize() {
+                            return strings.length;
+                        }
+
+                        public Object getElementAt(int i) {
+                            return strings[i];
+                        }
+                    });
+                    break;
+                }
+            }
+            case "Candidates": {
+                votingComboBox.setVisible(false);
+
+                try {
+                    votingComboBox.setEnabled(false);
+                    jList1.setModel(new javax.swing.AbstractListModel() {
+                        String[] strings = userService.getCandidateArray();
+
+                        public int getSize() {
+                            return strings.length;
+                        }
+
+                        public Object getElementAt(int i) {
+                            return strings[i];
+                        }
+                    });
+                    votingComboBox.setModel(new javax.swing.DefaultComboBoxModel());
+                    votingComboBox.setEnabled(false);
                     break;
                 } catch (NullPointerException | ListIsEmpty | SQLException e) {
                     jList1.setModel(new javax.swing.AbstractListModel() {
@@ -201,9 +235,11 @@ public class AdminMenu extends BaseMenuFrame {
                 }
             }
             case "History": {
+                votingComboBox.setVisible(false);
+
                 try {
                     System.out.println("fist try");
-                    votionComboBox.setEnabled(false);
+                    votingComboBox.setEnabled(false);
                     jList1.setModel(new javax.swing.AbstractListModel() {
                         String[] strings = historyService.getHistoryArray();
 
@@ -215,8 +251,8 @@ public class AdminMenu extends BaseMenuFrame {
                             return strings[i];
                         }
                     });
-                    votionComboBox.setModel(new javax.swing.DefaultComboBoxModel());
-                    votionComboBox.setEnabled(false);
+                    votingComboBox.setModel(new javax.swing.DefaultComboBoxModel());
+                    votingComboBox.setEnabled(false);
                     break;
                 } catch (NullPointerException | ListIsEmpty | SQLException e) {
                     System.out.println("catch");
@@ -232,13 +268,15 @@ public class AdminMenu extends BaseMenuFrame {
 //                            return strings[i];
 //                        }
 //                    });
-                    votionComboBox.setModel(new javax.swing.DefaultComboBoxModel());
-                    votionComboBox.setEnabled(false);
+                    votingComboBox.setModel(new javax.swing.DefaultComboBoxModel());
+                    votingComboBox.setEnabled(false);
                     break;
                 }
             }
             case "Votions": {
-                votionTitle = "*All*";
+                votingComboBox.setVisible(true);
+
+                votingTitle = "*All*";
                 try {
                     jList1.setModel(new javax.swing.AbstractListModel() {
                         String[] strings = votingService.getVotingArray();
@@ -251,23 +289,23 @@ public class AdminMenu extends BaseMenuFrame {
                         public Object getElementAt(int i) {
                             return strings[i];
                         }
-                    });
+                    });//TODO default List Model
 
-                    votionComboBox.setModel(
+                    votingComboBox.setModel(
                             new javax.swing.DefaultComboBoxModel(
                                     votingService.getVotingTitleArrayWithNull()
                             )
                     );
                 }catch (SQLException | ListIsEmpty e){
                     jList1.setModel(new javax.swing.DefaultListModel());
-                    votionComboBox.setModel(
+                    votingComboBox.setModel(
                             new javax.swing.DefaultComboBoxModel(
                                     new String[]{"*All*"}
                             )
                     );
 
                 }
-                votionComboBox.setEnabled(true);
+                votingComboBox.setEnabled(true);
                 break;
             }
             default:
@@ -277,8 +315,8 @@ public class AdminMenu extends BaseMenuFrame {
 
     private void votingComboBoxActionPerformed(java.awt.event.ActionEvent evt) {
         try {
-            votionTitle = (String)votionComboBox.getModel().getSelectedItem();
-            if (votionTitle.equals("*All*")) {
+            votingTitle = (String) votingComboBox.getModel().getSelectedItem();
+            if (votingTitle.equals("*All*")) {
                 jList1.setModel(new javax.swing.AbstractListModel() {
                     String[] strings = votingService.getVotingArray();
 
@@ -294,7 +332,7 @@ public class AdminMenu extends BaseMenuFrame {
                 jList1.setModel(new javax.swing.AbstractListModel() {
                     String[] strings = userService.getCandidateNameArray(
                             votingService.getVotingCandidateList(
-                                    votingService.getByName(votionTitle).getId()));
+                                    votingService.getCandidateByName(votingTitle).getId()));
 
                     public int getSize() {
                         return strings.length;
@@ -342,20 +380,27 @@ public class AdminMenu extends BaseMenuFrame {
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;
     private javax.swing.JButton resultsButton;
-    private javax.swing.JComboBox votionComboBox;
+    private javax.swing.JComboBox votingComboBox;
     private javax.swing.JComboBox UCVComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
-    private UserAddFrame userAddFrame;
 
     public void update() {
-            this.UCVComboBoxActionPerformed(new java.awt.event.ActionEvent(new Object(), 0, title));
+            this.UCHVComboBoxActionPerformed(new java.awt.event.ActionEvent(new Object(), 0, title));
     }
 
     public void updateVoting() {
         System.out.println("voting update");
-            this.votingComboBoxActionPerformed(new java.awt.event.ActionEvent(new Object(), 0, votionTitle));
+            this.votingComboBoxActionPerformed(new java.awt.event.ActionEvent(new Object(), 0, votingTitle));
+    }
+
+    public void updateVotingComboBox() throws ListIsEmpty, SQLException {
+        votingComboBox.setModel(
+                new javax.swing.DefaultComboBoxModel(
+                        votingService.getVotingTitleArrayWithNull()
+                )
+        );
     }
 
 
@@ -372,10 +417,12 @@ public class AdminMenu extends BaseMenuFrame {
         deleteButton = new javax.swing.JButton();
         editButton = new javax.swing.JButton();
         resultsButton = new javax.swing.JButton();
-        votionComboBox = new javax.swing.JComboBox();
+        votingComboBox = new javax.swing.JComboBox();
         editButton.setEnabled(false);
 
-        votionComboBox.setEnabled(false);
+        votingComboBox.setEnabled(false);
+        votingComboBox.setVisible(false);
+
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -404,11 +451,11 @@ public class AdminMenu extends BaseMenuFrame {
         jScrollPane1.setViewportView(jList1);
 
         UCVComboBox.setModel(new javax.swing.DefaultComboBoxModel(
-                        new String[]{"Users", "History", "Votions"})
+                        new String[]{"Users", "Candidates", "History", "Votions"})
         );
         UCVComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    UCVComboBoxActionPerformed(evt);
+                    UCHVComboBoxActionPerformed(evt);
             }
         });
 
@@ -440,8 +487,8 @@ public class AdminMenu extends BaseMenuFrame {
             }
         });
 
-        votionComboBox.setModel(new javax.swing.DefaultComboBoxModel());
-        votionComboBox.addActionListener(new java.awt.event.ActionListener() {
+        votingComboBox.setModel(new javax.swing.DefaultComboBoxModel());
+        votingComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 votingComboBoxActionPerformed(evt);
             }
@@ -467,7 +514,7 @@ public class AdminMenu extends BaseMenuFrame {
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addComponent(UCVComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addGap(18, 18, 18)
-                                                                .addComponent(votionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                                .addComponent(votingComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -485,7 +532,7 @@ public class AdminMenu extends BaseMenuFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(UCVComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(votionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(votingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()

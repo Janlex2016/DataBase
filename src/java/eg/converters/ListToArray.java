@@ -6,7 +6,7 @@
 package eg.converters;
 
 import eg.models.User;
-import eg.models.Votion;
+import eg.models.Voting;
 import java.util.List;
 
 public class ListToArray {
@@ -27,10 +27,11 @@ public class ListToArray {
                     list.get(i).getAccess().toString()
             );
         }
+
         return nameArray;
     }
     
-    public static  String[] getVotingArray(List<Votion> list){
+    public static  String[] getVotingArray(List<Voting> list){
 
         nameArray = new String[list.size()];
 

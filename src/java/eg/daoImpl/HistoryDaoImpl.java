@@ -26,7 +26,7 @@ public class HistoryDaoImpl implements HistoryDao{
     @Override
     public boolean deleteById(int id) throws SQLException{
         
-        if(getById(id)==null) return false;
+        if(getUserById(id)==null) return false;
         String insert = String.format("DELETE FROM HISTORY WHERE ID='%1$d'", id);
         ConnectionToDataBase.getConnection().insert(insert);
 //        ConnectionToDataBase.getConnection().insert("DELETE FROM History WHERE id='"+id+"'");
@@ -34,7 +34,7 @@ public class HistoryDaoImpl implements HistoryDao{
     }
 
     @Override
-    public History getById(int id) throws SQLException {
+    public History getUserById(int id) throws SQLException {
         String insert = String.format("HISTORY WHERE ID='%1$d'", id);
         ResultSet rs = ConnectionToDataBase.getConnection().query(insert);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("History WHERE id='"+id+"'");

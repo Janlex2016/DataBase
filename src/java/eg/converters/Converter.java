@@ -7,7 +7,7 @@ package eg.converters;
 
 import eg.models.History;
 import eg.models.User;
-import eg.models.Votion;
+import eg.models.Voting;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -26,10 +26,15 @@ public class Converter {
         if(!rs.next()) return null;
         return new User(rs.getInt("ID"),rs.getString("NAME"), rs.getString("LOGIN"), rs.getString("PASSWORD"), rs.getString("ACCESS"));
     }
-    
-    public static Votion convertResultSetToVoting(ResultSet rs) throws SQLException{
+
+    public static User convertResultSetToCandidate(ResultSet rs) throws SQLException{
         if(!rs.next()) return null;
-        return new Votion(rs.getInt("ID"),rs.getString("TITLE"));
+        return new User(rs.getInt("ID"),rs.getString("NAME"), "","", rs.getString("ACCESS"));
+    }
+    
+    public static Voting convertResultSetToVoting(ResultSet rs) throws SQLException{
+        if(!rs.next()) return null;
+        return new Voting(rs.getInt("ID"),rs.getString("TITLE"));
     }
 
  }

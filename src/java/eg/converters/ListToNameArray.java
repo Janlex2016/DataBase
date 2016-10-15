@@ -1,14 +1,14 @@
 package eg.converters;
 
 import eg.models.User;
-import eg.models.Votion;
+import eg.models.Voting;
 import java.util.List;
 
 public class ListToNameArray {
     
     private static String nameArray[];
 
-    public static  String[] getUserNameArray(List<User> list){
+    public static  String[] getCandidateNameArray(List<User> list){
 
         nameArray = new String[list.size()];
 
@@ -18,7 +18,7 @@ public class ListToNameArray {
         return nameArray;
     }
 
-    public static  String[] getVotionTitleArray(List<Votion> list){
+    public static  String[] getVotionTitleArray(List<Voting> list){
 
         nameArray = new String[list.size()];
 
@@ -28,7 +28,7 @@ public class ListToNameArray {
         return nameArray;
     }
     
-    public static  String[] getVotingTitleArrayWithNull(List<Votion> list){
+    public static  String[] getVotingTitleArrayWithNull(List<Voting> list){
 
         nameArray = new String[list.size()+1];
         nameArray[0] = "*All*";

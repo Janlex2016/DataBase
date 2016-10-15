@@ -7,7 +7,7 @@ package eg.converters;
 
 import eg.models.History;
 import eg.models.User;
-import eg.models.Votion;
+import eg.models.Voting;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,12 +27,12 @@ public class ListConverter {
         return list;
     }
     
-    public static List<Votion> convertResultSetToVotionList(ResultSet rs) throws SQLException{
-        List<Votion> list = new ArrayList<>();
+    public static List<Voting> convertResultSetToVotionList(ResultSet rs) throws SQLException{
+        List<Voting> list = new ArrayList<>();
         if(!rs.first())return null;
         rs.previous();
         while(rs.next()){
-            list.add(new Votion(rs.getInt("ID"),rs.getString("TITLE")));
+            list.add(new Voting(rs.getInt("ID"),rs.getString("TITLE")));
         }
         return list;
     }
@@ -46,7 +46,16 @@ public class ListConverter {
         }
         return list;
     }
-    
+    public static List<User> convertResultSetToCandidateList(ResultSet rs) throws SQLException{
+        List<User> list = new ArrayList<>();
+        if(!rs.first())return null;
+        rs.previous();
+        while(rs.next()){
+            list.add(new User(rs.getInt("ID"),rs.getString("NAME"), "", "", rs.getString("ACCESS")));
+        }
+        return list;
+    }
+
     public static List<History> convertResultSetToVotingWithCandidatesList(ResultSet rs) throws SQLException{
         List<History> list = new ArrayList<>();
         if(!rs.first())return null;

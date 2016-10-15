@@ -23,6 +23,7 @@ import java.util.List;
 public interface UserService {
 
     public void addUser(String name, String login, String password, String access) throws SQLException, IncorrectInput;
+    public void addCandidate(String name, String access) throws SQLException, IncorrectInput;
     public void deleteCandidate(int candidateId) throws SQLException;
     public List<User> getUsers() throws SQLException, ListIsEmpty;
     public User getUserById(int userId) throws SQLException, UserNotFound, AccessDenied;
@@ -36,7 +37,9 @@ public interface UserService {
     public void vote(int candidateId, int votionId, int userId) throws SQLException,AccessDenied,CandidateNotFound,HistoryNotFound,UserNotFound,VotingNotFound;
     public void deleteById(int id)throws SQLException, UserNotFound;
     public List<User> getAll()throws SQLException, ListIsEmpty;
+    public List<User> getAllCandidates()throws SQLException, ListIsEmpty;
     public User getById(int id) throws SQLException,UserNotFound;
     public String[] getCandidateNameArray(List<User> list) throws SQLException;
     public String[] getUserArray() throws SQLException, ListIsEmpty;
+    public String[] getCandidateArray() throws SQLException, ListIsEmpty;
 }

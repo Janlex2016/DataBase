@@ -25,7 +25,7 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public boolean deleteById(int id) throws SQLException{
-        if(getById(id)==null) return false;
+        if(getUserById(id)==null) return false;
         String input = String.format("DELETE FROM USERS WHERE ID=%1$d", id);
         ConnectionToDataBase.getConnection().insert(input);
 //        ConnectionToDataBase.getConnection().insert("DELETE FROM Users WHERE id='"+id+"'");
@@ -38,7 +38,20 @@ public class UserDaoImpl implements UserDao{
             "DELETE USERS, VOTING_CANDIDATES FROM USERS, VOTING_CANDIDATES WHERE USERS.ID = VOTING_CANDIDATES.CANDIDATE_ID AND USERS.ID ="+id);
         return true;
     }
-    
+
+    @Override
+    public void addCandidate(User user) throws SQLException {
+        String input = String.format("INSERT INTO CANDIDATES (NAME, ACCESS) VALUES ('%1$s', '%2$s');",user.getName(),String.valueOf(user.getAccess()));
+        ConnectionToDataBase.getConnection().insert(input);
+
+    }
+
+    @Override
+    public List<User> getAllCandidates() throws SQLException {
+        ResultSet rs = ConnectionToDataBase.getConnection().query("CANDIDATES");
+        return ListConverter.convertResultSetToCandidateList(rs);
+    }
+
     @Override
     public boolean deleteByName(String name) throws SQLException{
         
@@ -50,11 +63,19 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public User getById(int id) throws SQLException{
+    public User getUserById(int id) throws SQLException{
         String input = String.format("USERS WHERE ID='%1$d'", id);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("Users WHERE id='"+id+"'");
         return Converter.convertResultSetToUser(rs);
+    }
+
+    @Override
+    public User getCandidateById(int id) throws SQLException{
+        String input = String.format("CANDIDATES WHERE ID='%1$d'", id);
+        ResultSet rs = ConnectionToDataBase.getConnection().query(input);
+//        ResultSet rs = ConnectionToDataBase.getConnection().query("Users WHERE id='"+id+"'");
+        return Converter.convertResultSetToCandidate(rs);
     }
 
     @Override
@@ -63,6 +84,14 @@ public class UserDaoImpl implements UserDao{
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("Users WHERE name='"+name+"'");
         return Converter.convertResultSetToUser(rs);
+    }
+
+    @Override
+    public User getCandidateByName(String name) throws SQLException{
+        String input = String.format("CANDIDATES WHERE NAME='%1$s'", name);
+        ResultSet rs = ConnectionToDataBase.getConnection().query(input);
+//        ResultSet rs = ConnectionToDataBase.getConnection().query("Users WHERE name='"+name+"'");
+        return Converter.convertResultSetToCandidate(rs);
     }
     
     @Override

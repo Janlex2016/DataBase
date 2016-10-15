@@ -25,6 +25,7 @@ public class DataBaseCheck {
 
     private void createTables() throws SQLException {
         createUsersTable();
+        createCandidatesTable();
         createHistoryTable();
         createVotingTable();
         createVotingCandidatesTable();
@@ -37,8 +38,19 @@ public class DataBaseCheck {
                         "(\n" +
                         "ID Integer PRIMARY KEY AUTO_INCREMENT,\n" +
                         "NAME varchar(40) NOT NULL,\n" +
-                        "LOGIN varchar(40) NOT NULL UNIQUE,\n" +
+                        "LOGIN varchar(40) UNIQUE DEFAULT NULL,\n" +
                         "PASSWORD varchar(40) NOT NULL,\n" +
+                        "ACCESS varchar(40) NOT NULL\n" +
+                        ")"
+        );
+    }
+
+    private void createCandidatesTable() throws SQLException {
+        ConnectionToDataBase.getConnection().insert(
+                "CREATE TABLE CANDIDATES\n" +
+                        "(\n" +
+                        "ID Integer PRIMARY KEY AUTO_INCREMENT,\n" +
+                        "NAME varchar(40) NOT NULL UNIQUE,\n" +
                         "ACCESS varchar(40) NOT NULL\n" +
                         ")"
         );
@@ -87,4 +99,33 @@ public class DataBaseCheck {
         ResultSet rs = ConnectionToDataBase.getConnection().insertText("SHOW TABLES;");
         if (!rs.first()) throw new TablesDoNotExist();
     }
+
+    String procedure1 =
+            "DELIMITER // \n" +
+            "\n" +
+            "CREATE PROCEDURE `COUNT_VOTES_WITH_CANDIDATE_ID_AND_VOTING_ID` (IN USER_ID INT, IN VOTING_ID INT) \n" +
+            "LANGUAGE SQL \n" +
+            "COMMENT 'Getting results' \n" +
+            "BEGIN \n" +
+            "    SELECT COUNT(*) FROM HISTORY H WHERE H.CANDIDATE_ID=USER_ID AND H.VOTING_ID=VOTING_ID; \n" +
+            "END// ";
+    String pr =
+            "DELIMITER // \n" +
+            "\n" +
+            "CREATE PROCEDURE `COUNT_VOTES_WITH_CANDIDATE_ID_AND_VOTING_ID` (IN USER_ID INT, IN VOTING_ID INT) \n" +
+            "LANGUAGE SQL \n" +
+            "COMMENT 'Getting results' \n" +
+            "BEGIN \n" +
+            "        \n" +
+            "SELECT\n" +
+            "    USERS.NAME AS 'Candidate name',  \n" +
+            "    (SELECT COUNT(*)\n" +
+            "    FROM HISTORY H \n" +
+            "    WHERE H.CANDIDATE_ID=USER_ID \n" +
+            "    AND H.VOTING_ID=VOTING_ID ) AS 'Votes'\n" +
+            "FROM USERS\n" +
+            "WHERE \n" +
+            "    USERS.ID=USER_ID\n" +
+            "    AND USERS.ACCESS='CANDIDATE';\n" +
+            "END// ";
 }

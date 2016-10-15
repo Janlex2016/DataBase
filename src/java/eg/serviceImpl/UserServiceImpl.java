@@ -34,24 +34,32 @@ public class UserServiceImpl implements UserService{
 
         User user = new User(0, name, login, password, access);
         if(name.length()<4) throw new IncorrectInput("Name is too short");
-        if(access.equals(Access.CANDIDATE.name())){
-            user.setLogin("");
-            user.setPassword("");
-        }else{
-            if(login.length()<4||password.length()<4) throw new IncorrectInput();
-        }
+        if(login.length()<4||password.length()<4) throw new IncorrectInput();
         userDao.add(user);
     }
 
     @Override
+    public void addCandidate(String name, String access) throws SQLException, IncorrectInput {
+        User user = new User(0, name, "", "", access);
+        if(name.length()<4) throw new IncorrectInput("Name is too short");
+        userDao.addCandidate(user);
+    }
+
+    @Override
     public void deleteCandidate(int candidateId) throws SQLException{
-        
         userDao.deleteCandidateById(candidateId);
     }
 
     @Override
     public List<User> getAll() throws SQLException, ListIsEmpty{
         List<User> list = userDao.getAll();
+        if(list==null) throw new ListIsEmpty();
+        return list;
+    }
+
+    @Override
+    public List<User> getAllCandidates() throws SQLException, ListIsEmpty{
+        List<User> list = userDao.getAllCandidates();
         if(list==null) throw new ListIsEmpty();
         return list;
     }
@@ -79,7 +87,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getUserById(int userId) throws SQLException, UserNotFound, AccessDenied{
-        User user = userDao.getById(userId);
+        User user = userDao.getUserById(userId);
         if(user==null) throw new UserNotFound();
         if(user.getAccess()!=Access.USER) throw new AccessDenied();
         return user;
@@ -87,7 +95,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getCandidateById(int userId) throws SQLException,AccessDenied,CandidateNotFound {
-        User user = userDao.getById(userId);
+        User user = userDao.getCandidateById(userId);
         if(user==null) throw new CandidateNotFound();
         if(user.getAccess()!=Access.CANDIDATE) throw new AccessDenied();
         return user;
@@ -95,7 +103,7 @@ public class UserServiceImpl implements UserService{
     
     @Override
     public User getCandidateByName(String name) throws SQLException,AccessDenied,CandidateNotFound {
-        User user = userDao.getByName(name);
+        User user = userDao.getCandidateByName(name);
         if(user==null) throw new CandidateNotFound();
         if(user.getAccess()!=Access.CANDIDATE) throw new AccessDenied();
         return user;
@@ -103,7 +111,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getAdminById(int userId) throws SQLException,UserNotFound,AccessDenied{
-        User user = userDao.getById(userId);
+        User user = userDao.getUserById(userId);
         if(user==null) throw new UserNotFound();
         if(user.getAccess()!=Access.ADMIN) throw new AccessDenied();
         return user;
@@ -111,14 +119,14 @@ public class UserServiceImpl implements UserService{
     
     @Override
     public User getById(int id) throws SQLException,UserNotFound{
-        User user = userDao.getById(id);
+        User user = userDao.getUserById(id);
         if(user==null) throw new UserNotFound();
         return user;
     }
 
     @Override
     public void deleteById(int userId) throws SQLException,UserNotFound{
-        User user = userDao.getById(userId);
+        User user = userDao.getUserById(userId);
         if(user==null) throw new UserNotFound();
         userDao.deleteById(userId);
     }
@@ -144,19 +152,24 @@ public class UserServiceImpl implements UserService{
         
         if(getCandidateById(candidateId)==null) throw new CandidateNotFound();
         if(getUserById(userId)==null) throw new UserNotFound();
-        if(votingDao.getById(votionId)==null) throw new VotingNotFound();
+        if(votingDao.getUserById(votionId)==null) throw new VotingNotFound();
         if(historyDao.isThereVotingAndUserId(votionId, userId)) throw new AccessDenied("You cant vote in this voting again!");
         historyDao.add(new History(0, candidateId, votionId, userId));
     }
 
     @Override
     public String[] getCandidateNameArray(List<User> list) throws SQLException {
-        String[] nameArray = ListToNameArray.getUserNameArray(list);
+        String[] nameArray = ListToNameArray.getCandidateNameArray(list);
         return nameArray;
     }
 
     @Override
     public String[] getUserArray() throws SQLException, ListIsEmpty {
         return ListToArray.getUserArray(getAll());
+    }
+
+    @Override
+    public String[] getCandidateArray() throws SQLException, ListIsEmpty {
+        return ListToArray.getUserArray(getAllCandidates());
     }
 }

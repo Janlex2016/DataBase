@@ -2,16 +2,16 @@ package eg.models;
 
 import java.util.List;
 
-public class Votion {
+public class Voting {
     
     private int id;
     private String title;
     private List<User> candidates;
 
-    public Votion() {
+    public Voting() {
     }
 
-    public Votion(int id,String title){
+    public Voting(int id, String title){
         this.id = id;
         this.title = title;
     }

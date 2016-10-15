@@ -1,6 +1,7 @@
 package eg.menu.addFrames;
 
 import eg.exceptions.IncorrectInput;
+import eg.exceptions.ListIsEmpty;
 import eg.main.Main;
 
 import java.sql.SQLException;
@@ -20,6 +21,13 @@ public class VotingAddFrame extends BaseAddFrame {
             showMessage(ex.getMessage(), messageDialogTitle);
         }finally {
             Main.getAdminMenu().updateVoting();
+            try {
+                Main.getAdminMenu().updateVotingComboBox();
+            } catch (ListIsEmpty listIsEmpty) {
+                listIsEmpty.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();//TODO EXCEPTIONS
+            }
         }
     }
 

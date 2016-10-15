@@ -21,11 +21,11 @@ public class HistoryServiceImpl implements HistoryService{
     @Override
     public void add(int candidateId, int votionId, int userId) throws SQLException, AccessDenied,CandidateNotFound,UserNotFound,VotingNotFound, IncorrectInput{
         if(candidateId<1||votionId<1||userId<1) throw new IncorrectInput();
-        if(userDao.getById(candidateId)==null) throw new CandidateNotFound();
-        if(userDao.getById(userId)==null) throw new UserNotFound();
-        if(userDao.getById(candidateId).getAccess()!=Access.CANDIDATE) throw new AccessDenied("User "+userDao.getById(candidateId)+" isn't candidate");
-        if(userDao.getById(userId).getAccess()!=Access.USER) throw new AccessDenied((userDao.getById(userId).getAccess()!=Access.USER)+" : "+userDao.getById(userId).getAccess()+" : "+userDao.getById(userId).getName());
-        if(votingDao.getById(votionId)==null) throw new VotingNotFound();
+        if(userDao.getUserById(candidateId)==null) throw new CandidateNotFound();
+        if(userDao.getUserById(userId)==null) throw new UserNotFound();
+        if(userDao.getUserById(candidateId).getAccess()!=Access.CANDIDATE) throw new AccessDenied("User "+userDao.getUserById(candidateId)+" isn't candidate");
+        if(userDao.getUserById(userId).getAccess()!=Access.USER) throw new AccessDenied((userDao.getUserById(userId).getAccess()!=Access.USER)+" : "+userDao.getUserById(userId).getAccess()+" : "+userDao.getUserById(userId).getName());
+        if(votingDao.getUserById(votionId)==null) throw new VotingNotFound();
         historyDao.add(new History(0, candidateId, votionId, userId));
     }
 
@@ -39,7 +39,7 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override
     public History getById(int historyId) throws SQLException, HistoryNotFound{
-        History history = historyDao.getById(historyId);
+        History history = historyDao.getUserById(historyId);
         if(history==null) throw new HistoryNotFound();
         return history;
     }
@@ -77,7 +77,7 @@ public class HistoryServiceImpl implements HistoryService{
         
         List<User> ulist = new ArrayList<>();
         for(History h:hlist){
-            ulist.add(new User(h.getHistoryId(), userDao.getById(h.getCandidateId()).getName(), votingDao.getById(h.getVotionId()).getTitle(), userDao.getById(h.getUserId()).getName(), "USER"));
+            ulist.add(new User(h.getHistoryId(), userDao.getUserById(h.getCandidateId()).getName(), votingDao.getUserById(h.getVotionId()).getTitle(), userDao.getUserById(h.getUserId()).getName(), "USER"));
         }
         
         return ulist;

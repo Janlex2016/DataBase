@@ -5,7 +5,7 @@ import eg.converters.ListToNameArray;
 import eg.dao.UserDao;
 import eg.dao.VotingDao;
 import eg.exceptions.*;
-import eg.models.Votion;
+import eg.models.Voting;
 import eg.service.VotingService;
 import eg.daoImpl.DaoFactory;
 import eg.models.History;
@@ -21,58 +21,67 @@ public class VotingServiceImpl implements VotingService {
     private final UserDao userDao = DaoFactory.getUserDao();
     
     @Override
-    public void addCandidateToVotion(int candidateId, int votionId) throws SQLException,AccessDenied,UserNotFound,VotingNotFound, CandidateNotFound{
+    public void addCandidateToVoting(int candidateId, int votingId) throws SQLException,AccessDenied,UserNotFound,VotingNotFound, CandidateNotFound{
         
-        if(userDao.getById(candidateId)==null) throw new UserNotFound();
-        if(userDao.getById(candidateId).getAccess()!=Access.CANDIDATE) throw new AccessDenied();
-        if(votingDao.getById(votionId)==null) throw new VotingNotFound();
+        if(userDao.getCandidateById(candidateId)==null) throw new UserNotFound();
+        if(userDao.getCandidateById(candidateId).getAccess()!=Access.CANDIDATE) throw new AccessDenied();
+        if(votingDao.getUserById(votingId)==null) throw new VotingNotFound();
         //if
-        votingDao.addCandidateToVotion(new History(0, candidateId, votionId, 0));
+        votingDao.addCandidateToVoting(new History(0, candidateId, votingId, 0));
     }
 
     @Override
     public void add(String title) throws SQLException, IncorrectInput {
         
         if(title.length()<4) throw new IncorrectInput();
-        votingDao.add(new Votion(0, title));
+        votingDao.add(new Voting(0, title));
     }
 
     @Override
     public void deleteById(int id) throws SQLException, VotingNotFound {
 
-        if(votingDao.getById(id)==null) throw new VotingNotFound();
+        if(votingDao.getUserById(id)==null) throw new VotingNotFound();
         votingDao.deleteById(id);
     }
 
     @Override
-    public List<Votion> getAll() throws SQLException, ListIsEmpty {
-        List<Votion> list = votingDao.getAll();
+    public List<Voting> getAll() throws SQLException, ListIsEmpty {
+        List<Voting> list = votingDao.getAll();
         if(list==null) throw new ListIsEmpty();
         return list;
     }
 
     @Override
-    public Votion getById(int id) throws SQLException, VotingNotFound, UserNotFound{
+    public Voting getById(int id) throws SQLException, VotingNotFound, UserNotFound{
 
-        Votion votion = votingDao.getById(id);
-        if(votion==null) throw new VotingNotFound();
-        addCandidateList(votion, getVotingCandidateList(id));//Добавление листа не для всех
-        return votion;
+        Voting voting = votingDao.getUserById(id);
+        if(voting ==null) throw new VotingNotFound();
+        addCandidateList(voting, getVotingCandidateList(id));//Добавление листа не для всех
+        return voting;
     }
 
     @Override
-    public Votion getByName(String name) throws SQLException, VotingNotFound, UserNotFound{
+    public Voting getByName(String name) throws SQLException, VotingNotFound, UserNotFound{
 
-        Votion votion = votingDao.getByName(name);
-        if(votion==null) throw new VotingNotFound();
-        addCandidateList(votion, getVotingCandidateList(votingDao.getByName(name).getId()));//Добавление листа не для всех
-        return votion;
+        Voting voting = votingDao.getByName(name);
+        if(voting ==null) throw new VotingNotFound();
+        addCandidateList(voting, getVotingCandidateList(votingDao.getByName(name).getId()));//Добавление листа не для всех
+        return voting;
+    }
+
+    @Override
+    public Voting getCandidateByName(String name) throws SQLException, VotingNotFound, UserNotFound{
+
+        Voting voting = votingDao.getByName(name);
+        if(voting ==null) throw new VotingNotFound();
+        addCandidateList(voting, getVotingCandidateList(votingDao.getByName(name).getId()));//Добавление листа не для всех
+        return voting;
     }
     
     @Override
-    public void addCandidateList(Votion votion, List<User> list) throws SQLException, VotingNotFound {
-        if(votingDao.getById(votion.getId())==null) throw new VotingNotFound();
-        votingDao.addCandidateList(votion, list);
+    public void addCandidateList(Voting voting, List<User> list) throws SQLException, VotingNotFound {
+        if(votingDao.getUserById(voting.getId())==null) throw new VotingNotFound();
+        votingDao.addCandidateList(voting, list);
     }
     
     @Override
@@ -83,7 +92,7 @@ public class VotingServiceImpl implements VotingService {
         List<User> list = new ArrayList<>();
         
         for(History v: candidateList){
-            list.add(userDao.getById(v.getCandidateId()));
+            list.add(userDao.getCandidateById(v.getCandidateId()));
         }
         
         return list;
@@ -92,7 +101,7 @@ public class VotingServiceImpl implements VotingService {
     @Override
     public List<User> getPossibleCandidateList(int votionId) throws SQLException{
         
-        List<User> candidateList = userDao.getUsersByAccess("CANDIDATE");
+        List<User> candidateList = userDao.getAllCandidates();
         
         try{
             List<User> votionCandidateList = getVotingCandidateList(votionId);
@@ -137,9 +146,9 @@ public class VotingServiceImpl implements VotingService {
     @Override
     public void deleteCandidateFromVotion(int candidateId, int votionId) throws SQLException, AccessDenied, CandidateNotFound, VotingNotFound, UserNotFound {
        
-        if(userDao.getById(candidateId)==null) throw new UserNotFound();
-        if(userDao.getById(candidateId).getAccess()!=Access.CANDIDATE) throw new AccessDenied();
-        if(votingDao.getById(votionId)==null) throw new VotingNotFound();
+        if(userDao.getUserById(candidateId)==null) throw new UserNotFound();
+        if(userDao.getUserById(candidateId).getAccess()!=Access.CANDIDATE) throw new AccessDenied();
+        if(votingDao.getUserById(votionId)==null) throw new VotingNotFound();
         //if
         votingDao.deleteCandidateFromVotion(candidateId, votionId);
     }
