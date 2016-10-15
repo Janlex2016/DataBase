@@ -48,4 +48,9 @@ public final class ConnectionToDataBase {
         ResultSet rs = statement.executeQuery(text);
         return rs;
     }
+
+    public ResultSet go(String text) throws SQLException {
+        ResultSet rs = statement.executeQuery(text);
+        return rs;
+    }
 }

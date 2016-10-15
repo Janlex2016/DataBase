@@ -34,8 +34,7 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public boolean deleteCandidateById(int id) throws SQLException{
-        ConnectionToDataBase.getConnection().insert("SET SQL_SAFE_UPDATES = 0;\n" +
-            "DELETE USERS, VOTING_CANDIDATES FROM USERS, VOTING_CANDIDATES WHERE USERS.ID = VOTING_CANDIDATES.CANDIDATE_ID AND USERS.ID ="+id);
+        ConnectionToDataBase.getConnection().insert("CALL VotingDataBase.DELETE_CANDIDATE("+id+");");
         return true;
     }
 

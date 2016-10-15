@@ -117,6 +117,21 @@ public class AdminMenu extends BaseMenuFrame {
                 }
                 break;
             }
+            case "Candidates": {
+                try {
+                    candidateName = jList1.getSelectedValue().toString();
+                    int t = candidateName.indexOf(" ");
+                    candidateName = candidateName.substring(0, t);
+                    votingService.deleteByCandidateId(Integer.parseInt(candidateName));
+                    userService.deleteCandidate(Integer.parseInt(candidateName));
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Output", JOptionPane.PLAIN_MESSAGE);
+                    System.out.println(ex);
+
+                } catch (NullPointerException e) {
+                }
+                break;
+            }
             case "History": {
                 try {
                     candidateName = jList1.getSelectedValue().toString();
@@ -138,6 +153,7 @@ public class AdminMenu extends BaseMenuFrame {
                         votingService.deleteById(Integer.parseInt(candidateName));
                     } catch (SQLException | VotingNotFound | UserNotFound ex) {
                         JOptionPane.showMessageDialog(null, ex.getMessage(), "Output", JOptionPane.PLAIN_MESSAGE);
+                        ex.printStackTrace();
                     } catch (NullPointerException e) {
                     }
                     break;

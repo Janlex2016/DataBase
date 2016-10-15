@@ -30,6 +30,8 @@ public class DataBaseCheck {
         createVotingTable();
         createVotingCandidatesTable();
         createDefaultAdmin();
+        createDeleteVotingProcedure();
+        createDeleteCandidateProcedure();
     }
 
     private void createUsersTable() throws SQLException {
@@ -86,6 +88,59 @@ public class DataBaseCheck {
                         "CANDIDATE_ID varchar(40) NOT NULL,\n" +
                         "VOTING_ID varchar(40) NOT NULL\n" +
                         ")"
+        );
+    }
+    private void createDeleteVotingProcedure() throws SQLException {
+        ConnectionToDataBase.getConnection().insertText(
+                "DELIMITER // \n" +
+                "\n" +
+                "CREATE PROCEDURE `DELETE_VOTING` (IN VOTING_ID INT) \n" +
+                "LANGUAGE SQL \n" +
+                "COMMENT 'Voting delete' \n" +
+                "BEGIN \n" +
+                "        \n" +
+                "SET SQL_SAFE_UPDATES = 0;\n" +
+                "\n" +
+                "DELETE VOTING\n" +
+                "    FROM VOTING\n" +
+                "    WHERE VOTING.ID = VOTING_ID;\n" +
+                "\n" +
+                "DELETE VOTING_CANDIDATES\n" +
+                "    FROM VOTING_CANDIDATES\n" +
+                "    WHERE VOTING_CANDIDATES.VOTING_ID = VOTING_ID;\n" +
+                "\n" +
+                "DELETE HISTORY\n" +
+                "    FROM HISTORY\n" +
+                "    WHERE HISTORY.VOTING_ID = VOTING_ID;\n" +
+                "\n" +
+                "END// "
+        );
+    }
+
+    private void createDeleteCandidateProcedure() throws SQLException {
+        ConnectionToDataBase.getConnection().insertText(
+                "DELIMITER // \n" +
+                "\n" +
+                "CREATE PROCEDURE `DELETE_CANDIDATE` (IN CANDIDATE_ID INT) \n" +
+                "LANGUAGE SQL \n" +
+                "COMMENT 'Candidate delete' \n" +
+                "BEGIN \n" +
+                "\n" +
+                "SET SQL_SAFE_UPDATES = 0;\n" +
+                "\n" +
+                "DELETE CANDIDATES\n" +
+                "    FROM CANDIDATES\n" +
+                "    WHERE CANDIDATES.ID = CANDIDATE_ID;\n" +
+                "\n" +
+                "DELETE VOTING_CANDIDATES\n" +
+                "    FROM VOTING_CANDIDATES\n" +
+                "    WHERE VOTING_CANDIDATES.CANDIDATE_ID = CANDIDATE_ID;\n" +
+                "\n" +
+                "DELETE HISTORY\n" +
+                "    FROM HISTORY\n" +
+                "    WHERE HISTORY.CANDIDATE_ID = CANDIDATE_ID;\n" +
+                "\n" +
+                "END// "
         );
     }
 
