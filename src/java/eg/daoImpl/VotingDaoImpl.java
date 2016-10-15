@@ -16,15 +16,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- *
- * @author noname
- */
 public class VotingDaoImpl implements VotingDao {
 
     @Override
     public void add(Votion votion) throws SQLException {
-        String input = String.format("INSERT INTO VOTING (ID, TITLE) VALUES ('%1$d','%2$s');", votion.getId(), votion.getTitle());
+        //TODO Check id
+        String input = String.format("INSERT INTO VOTING (TITLE) VALUES ('%1$s');", votion.getTitle());
         ConnectionToDataBase.getConnection().insert(input);
 //        ConnectionToDataBase.getConnection().insert("INSERT INTO Votion (id, title) VALUES ('"+votion.getId()+"','"+votion.getTitle()+"');");
     }
@@ -48,7 +45,7 @@ public class VotingDaoImpl implements VotingDao {
         String input = String.format("VOTING WHERE ID='%1$d'", id);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("Votion WHERE id='"+id+"'");
-        return Converter.convertResultSetToVotion(rs);
+        return Converter.convertResultSetToVoting(rs);
     }
     
     @Override
@@ -56,7 +53,7 @@ public class VotingDaoImpl implements VotingDao {
         String input = String.format("VOTING WHERE TITLE='%1$s'", name);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("Votion WHERE title='"+name+"'");
-        return Converter.convertResultSetToVotion(rs);
+        return Converter.convertResultSetToVoting(rs);
     }
 
     @Override
@@ -71,11 +68,11 @@ public class VotingDaoImpl implements VotingDao {
     }
     
     @Override
-    public List<History> getVotionWithCandidatesList(int votionId) throws SQLException {
+    public List<History> getVotingWithCandidatesList(int votionId) throws SQLException {
         String input = String.format("VOTING_CANDIDATES WHERE VOTING_ID='%1$d'", votionId);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("VotionTab WHERE VotionId='"+votionId+"'");
-        return ListConverter.convertResultSetToVotionWithCandidatesList(rs);
+        return ListConverter.convertResultSetToVotingWithCandidatesList(rs);
     }
     
     @Override

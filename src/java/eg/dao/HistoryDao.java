@@ -11,7 +11,8 @@ import java.sql.SQLException;
 
 public interface HistoryDao extends BaseOperations<History> {
     
-    public boolean isThereVotionAndUserId(int votionId, int userId) throws SQLException;
-    public int numberOfVoicesInVotion(int candidateId, int votionId) throws SQLException;
+    public boolean isThereVotingAndUserId(int votingId, int userId) throws SQLException;
+    public int numberOfVoicesInVoting(int candidateId, int votingId) throws SQLException;
+
 
 }

@@ -5,7 +5,6 @@
  */
 package eg.converters;
 
-import eg.models.History;
 import eg.models.User;
 import eg.models.Votion;
 import java.util.List;
@@ -31,7 +30,7 @@ public class ListToArray {
         return nameArray;
     }
     
-    public static  String[] getVotionArray(List<Votion> list){
+    public static  String[] getVotingArray(List<Votion> list){
 
         nameArray = new String[list.size()];
 
@@ -58,6 +57,10 @@ public class ListToArray {
                     list.get(i).getPassword()
             );
         }
-        return nameArray;
+        System.out.println("lk;lk;"+nameArray.toString());
+        if(nameArray[0].equals("")) {
+            System.out.println("Nul in history");
+            return null;
+        }else return nameArray;
     }
 }

@@ -22,7 +22,7 @@ public class ListConverter {
         if(!rs.first())return null;
         rs.previous();
         while(rs.next()){
-            list.add(new History(rs.getInt("id"),rs.getInt("CandidateId"), rs.getInt("VotionId"), rs.getInt("UserId")));
+            list.add(new History(rs.getInt("ID"),rs.getInt("CANDIDATE_ID"), rs.getInt("VOTING_ID"), rs.getInt("USER_ID")));
         }
         return list;
     }
@@ -32,7 +32,7 @@ public class ListConverter {
         if(!rs.first())return null;
         rs.previous();
         while(rs.next()){
-            list.add(new Votion(rs.getInt("id"),rs.getString("title")));
+            list.add(new Votion(rs.getInt("ID"),rs.getString("TITLE")));
         }
         return list;
     }
@@ -42,17 +42,17 @@ public class ListConverter {
         if(!rs.first())return null;
         rs.previous();
         while(rs.next()){
-            list.add(new User(rs.getInt("id"),rs.getString("name"), rs.getString("login"), rs.getString("password"), rs.getString("access")));
+            list.add(new User(rs.getInt("ID"),rs.getString("NAME"), rs.getString("LOGIN"), rs.getString("PASSWORD"), rs.getString("ACCESS")));
         }
         return list;
     }
     
-    public static List<History> convertResultSetToVotionWithCandidatesList(ResultSet rs) throws SQLException{  
+    public static List<History> convertResultSetToVotingWithCandidatesList(ResultSet rs) throws SQLException{
         List<History> list = new ArrayList<>();
         if(!rs.first())return null;
         rs.previous();
         while(rs.next()){
-            list.add(new History(rs.getInt("id"), rs.getInt("CandidateId"), rs.getInt("VotionId"), 0));
+            list.add(new History(rs.getInt("ID"), rs.getInt("CANDIDATE_ID"), rs.getInt("VOTING_ID"), 0));
         }
         return list;
     }

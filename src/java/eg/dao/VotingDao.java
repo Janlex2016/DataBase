@@ -13,7 +13,7 @@ public interface VotingDao extends BaseOperations<Votion> {
     public void deleteCandidateFromVotion(int candidateId, int votionId) throws SQLException;
     public void addCandidateList(Votion votion, List<User> list) throws SQLException;
     public Votion getByName(String name) throws SQLException;
-    public List<History> getVotionWithCandidatesList(int votionId) throws SQLException;
+    public List<History> getVotingWithCandidatesList(int votionId) throws SQLException;
     public void deleteCandidateById(int id) throws SQLException;
 
 }

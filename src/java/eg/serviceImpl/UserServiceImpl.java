@@ -145,7 +145,7 @@ public class UserServiceImpl implements UserService{
         if(getCandidateById(candidateId)==null) throw new CandidateNotFound();
         if(getUserById(userId)==null) throw new UserNotFound();
         if(votingDao.getById(votionId)==null) throw new VotingNotFound();
-        if(historyDao.isThereVotionAndUserId(votionId, userId)) throw new AccessDenied("You cant vote in this voting again!");
+        if(historyDao.isThereVotingAndUserId(votionId, userId)) throw new AccessDenied("You cant vote in this voting again!");
         historyDao.add(new History(0, candidateId, votionId, userId));
     }
 

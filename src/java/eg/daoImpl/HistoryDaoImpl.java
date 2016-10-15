@@ -48,16 +48,16 @@ public class HistoryDaoImpl implements HistoryDao{
     }
 
     @Override
-    public boolean isThereVotionAndUserId(int votionId, int userId) throws SQLException {
-        String insert = String.format("HISTORY WHERE VOTING_ID='%1$d' AND USER_ID='%2$d'", votionId, userId);
+    public boolean isThereVotingAndUserId(int votingId, int userId) throws SQLException {
+        String insert = String.format("HISTORY WHERE VOTING_ID='%1$d' AND USER_ID='%2$d'", votingId, userId);
         ResultSet rs = ConnectionToDataBase.getConnection().query(insert);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("History WHERE VotionId='"+votionId+"' AND UserId='"+userId+"'");
         return rs.next();
     }
 
     @Override
-    public int numberOfVoicesInVotion(int candidateId, int votionId) throws SQLException {
-        String input = String.format("HISTORY where CANDIDATE_ID='%1$d' AND VOTING_ID='%2$d'", candidateId,votionId);
+    public int numberOfVoicesInVoting(int candidateId, int votingId) throws SQLException {
+        String input = String.format("HISTORY where CANDIDATE_ID='%1$d' AND VOTING_ID='%2$d'", candidateId, votingId);
         ResultSet rs = ConnectionToDataBase.getConnection().query(input);
 //        ResultSet rs = ConnectionToDataBase.getConnection().query("History where CandidateId='"+candidateId+"' AND VotionId='"+votionId+"'");
         int numberOfVoices = 0;

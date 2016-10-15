@@ -4,14 +4,10 @@ import eg.converters.ListToArray;
 import eg.converters.ListToNameArray;
 import eg.dao.UserDao;
 import eg.dao.VotingDao;
+import eg.exceptions.*;
 import eg.models.Votion;
 import eg.service.VotingService;
 import eg.daoImpl.DaoFactory;
-import eg.exceptions.AccessDenied;
-import eg.exceptions.CandidateNotFound;
-import eg.exceptions.IncorrectInput;
-import eg.exceptions.UserNotFound;
-import eg.exceptions.VotingNotFound;
 import eg.models.History;
 import eg.models.User;
 import eg.models.enums.Access;
@@ -49,9 +45,9 @@ public class VotingServiceImpl implements VotingService {
     }
 
     @Override
-    public List<Votion> getAll() throws SQLException{
+    public List<Votion> getAll() throws SQLException, ListIsEmpty {
         List<Votion> list = votingDao.getAll();
-//        if(list==null) throw new ListIsEmpty();
+        if(list==null) throw new ListIsEmpty();
         return list;
     }
 
@@ -82,7 +78,7 @@ public class VotingServiceImpl implements VotingService {
     @Override
     public List<User> getVotingCandidateList(int votingId) throws SQLException{
         
-        List<History> candidateList = votingDao.getVotionWithCandidatesList(votingId);
+        List<History> candidateList = votingDao.getVotingWithCandidatesList(votingId);
         if(candidateList==null) return null;
         List<User> list = new ArrayList<>();
         
@@ -118,18 +114,18 @@ public class VotingServiceImpl implements VotingService {
     }
     
     @Override
-    public String[] getVotionTitleArray() throws SQLException {
+    public String[] getVotingTitleArray() throws SQLException, ListIsEmpty {
         return ListToNameArray.getVotionTitleArray(getAll());
     }
     
     @Override
-    public String[] getVotionArray() throws SQLException {
-        return ListToArray.getVotionArray(getAll());
+    public String[] getVotingArray() throws SQLException, ListIsEmpty {
+        return ListToArray.getVotingArray(getAll());
     }
 
     @Override
-    public String[] getVotionTitleArrayWithNull() throws SQLException {
-        return ListToNameArray.getVotionTitleArrayWithNull(getAll());
+    public String[] getVotingTitleArrayWithNull() throws SQLException, ListIsEmpty {
+        return ListToNameArray.getVotingTitleArrayWithNull(getAll());
     }
 
     

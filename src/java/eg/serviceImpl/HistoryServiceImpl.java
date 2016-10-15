@@ -32,7 +32,7 @@ public class HistoryServiceImpl implements HistoryService{
     @Override
     public List<History> getAll() throws SQLException, ListIsEmpty{
         List<History> list = historyDao.getAll();
-        
+        System.out.println(list.toString()+"asa");
         if(list==null) throw new ListIsEmpty();
         return list;
     }
@@ -52,17 +52,17 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override
     public boolean isThereVotionAndUserId(int votionId, int userId) throws SQLException {
-        return historyDao.isThereVotionAndUserId(votionId, userId);
+        return historyDao.isThereVotingAndUserId(votionId, userId);
     }
 
     @Override
     public List<History> countVoices(int votionId) throws SQLException {
         
-        List<History> ulist = votingDao.getVotionWithCandidatesList(votionId);
+        List<History> ulist = votingDao.getVotingWithCandidatesList(votionId);
         List<History> vlist = new ArrayList<>();
         
         for(History u:ulist){
-            vlist.add(new History(u.getHistoryId(), u.getCandidateId(), historyDao.numberOfVoicesInVotion(u.getCandidateId(), votionId), 0));
+            vlist.add(new History(u.getHistoryId(), u.getCandidateId(), historyDao.numberOfVoicesInVoting(u.getCandidateId(), votionId), 0));
         }
         return vlist;
     }

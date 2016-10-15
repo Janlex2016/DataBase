@@ -8,10 +8,6 @@ package eg.util.database;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-/**
- *
- * @author noname
- */
 public class Date {
     public static void main(String[] args) {
         

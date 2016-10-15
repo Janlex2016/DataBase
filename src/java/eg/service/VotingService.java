@@ -5,11 +5,7 @@
  */
 package eg.service;
 
-import eg.exceptions.AccessDenied;
-import eg.exceptions.CandidateNotFound;
-import eg.exceptions.IncorrectInput;
-import eg.exceptions.UserNotFound;
-import eg.exceptions.VotingNotFound;
+import eg.exceptions.*;
 import eg.models.User;
 import eg.models.Votion;
 import java.sql.SQLException;
@@ -28,12 +24,12 @@ public interface VotingService {
     public List<User> getVotingCandidateList(int votionId) throws SQLException, UserNotFound;
     public void deleteById(int id)throws SQLException, VotingNotFound, UserNotFound;
     public void deleteByCandidateId(int id)throws SQLException;
-    public List<Votion> getAll()throws SQLException;
+    public List<Votion> getAll() throws SQLException, ListIsEmpty;
     public Votion getById(int id) throws SQLException, VotingNotFound, UserNotFound;
     public Votion getByName(String name) throws SQLException, VotingNotFound, UserNotFound;
-    public String[] getVotionTitleArray() throws SQLException;
-    public String[] getVotionTitleArrayWithNull() throws SQLException;
-    public String[] getVotionArray() throws SQLException;
+    public String[] getVotingTitleArray() throws SQLException, ListIsEmpty;
+    public String[] getVotingTitleArrayWithNull() throws SQLException, ListIsEmpty;
+    public String[] getVotingArray() throws SQLException, ListIsEmpty;
     public List<User> getPossibleCandidateList(int votionId) throws SQLException, UserNotFound;
   
 }

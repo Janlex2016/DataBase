@@ -10,9 +10,6 @@ import eg.exceptions.CandidateNotFound;
 import eg.exceptions.UserNotFound;
 import eg.exceptions.VotingNotFound;
 import eg.main.Main;
-import eg.service.UserService;
-import eg.service.VotingService;
-import eg.serviceImpl.ServiceFactory;
 
 import java.sql.SQLException;
 
@@ -33,7 +30,7 @@ public class CandidateAddFrame extends BaseAddFrame {
             } catch (AccessDenied | CandidateNotFound | SQLException | UserNotFound | VotingNotFound ex) {
                 showMessage(ex.getMessage(), messageDialogTitle);
             } finally {
-                Main.getAdminMenu().updateVotion();
+                Main.getAdminMenu().updateVoting();
             }
         }
     }

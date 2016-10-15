@@ -88,7 +88,11 @@ public class UserMenu extends BaseMenuFrame {
 
         currentUserLabel.setText("You are logged as : " + currentUser.getName());
 
-        votingComboBox.setModel(new javax.swing.DefaultComboBoxModel(votingService.getVotionTitleArray()));
+        try {
+            votingComboBox.setModel(new DefaultComboBoxModel(votingService.getVotingTitleArray()));
+        } catch (ListIsEmpty listIsEmpty) {
+            listIsEmpty.printStackTrace();
+        }
         votingComboBox.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {

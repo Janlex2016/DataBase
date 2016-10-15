@@ -41,153 +41,6 @@ public class AdminMenu extends BaseMenuFrame {
         initComponents();
     }
 
-    @SuppressWarnings("unchecked")
-    private void initComponents() throws SQLException, ListIsEmpty {
-
-        this.setBounds(400, 150, 500, 300);
-        jLabel1 = new javax.swing.JLabel();
-        logOffButton = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        UCVComboBox = new javax.swing.JComboBox();
-        addButton = new javax.swing.JButton();
-        deleteButton = new javax.swing.JButton();
-        editButton = new javax.swing.JButton();
-        resultsButton = new javax.swing.JButton();
-        votionComboBox = new javax.swing.JComboBox();
-        editButton.setEnabled(false);
-
-        votionComboBox.setEnabled(false);
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabel1.setText("You are logged as : " + currentUser.getName());
-
-        logOffButton.setText("Log off");
-        logOffButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                logOffButtonActionPerformed(evt);
-            }
-
-        });
-
-        jList1.setModel(new javax.swing.AbstractListModel() {
-
-            String[] strings = userService.getUserArray();
-
-            public int getSize() {
-                return strings.length;
-            }
-
-            public Object getElementAt(int i) {
-                return strings[i];
-            }
-        });
-        jScrollPane1.setViewportView(jList1);
-
-        UCVComboBox.setModel(new javax.swing.DefaultComboBoxModel(
-                        new String[]{"Users", "History", "Votions"})
-        );
-        UCVComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    jComboBox3ActionPerformed(evt);
-                } catch (SQLException | ListIsEmpty ex) {
-                }
-            }
-        });
-
-        addButton.setText("ADD");
-        addButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addButtonActionPerformed(evt);
-            }
-        });
-
-        deleteButton.setText("DELETE");
-        deleteButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteButtonActionPerformed(evt);
-            }
-        });
-
-        editButton.setText("EDIT");
-        editButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editButtonActionPerformed(evt);
-            }
-        });
-
-        resultsButton.setText("RESULTS");
-        resultsButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resultsButtonActionPerformed(evt);
-            }
-        });
-
-        votionComboBox.setModel(new javax.swing.DefaultComboBoxModel());
-        votionComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                votionComboBoxActionPerformed(evt);
-            }
-        });
-
-// <editor-fold defaultstate="collapsed" desc="Generated Code">                          
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                                                .addComponent(logOffButton)
-                                                .addContainerGap())
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(UCVComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(18, 18, 18)
-                                                                .addComponent(votionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(resultsButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel1)
-                                        .addComponent(logOffButton))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(UCVComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(votionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(24, 24, 24)
-                                                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-                                                .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(resultsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(jScrollPane1))
-                                .addContainerGap())
-        );
-
-        pack();
-        this.setVisible(true);
-    }
     // </editor-fold>
 
 
@@ -201,13 +54,14 @@ public class AdminMenu extends BaseMenuFrame {
                     candidateName = jList1.getSelectedValue().toString();
                     int t = candidateName.indexOf(" ");
                     candidateName = candidateName.substring(0, t);
+                    System.out.println("--------candidate : " + candidateName);
                     int votingId = Integer.parseInt(candidateName);
                     String votingTitle = votingService.getById(votingId).getTitle();
                     //--------------------------
                     List<History> historyList = historyService.countVoices(votingId);
                     String[] history = new String[historyList.size()];
                     for (int i = 0; i < historyList.size(); i++) {
-                        history[i] = "Candidate : " + userService.getById(historyList.get(i).getCandidateId()).getName() + ", " + historyList.get(i).getVotionId() + " голосов";
+                        history[i] = "Candidate : " + userService.getById(historyList.get(i).getCandidateId()).getName() + ", " + historyList.get(i).getVotionId() + " votes";
                     }
 
                     //--------------------------
@@ -270,7 +124,6 @@ public class AdminMenu extends BaseMenuFrame {
                     int t = candidateName.indexOf(" ");
                     candidateName = candidateName.substring(0, t);
                     historyService.deleteById(Integer.parseInt(candidateName));
-                    JOptionPane.showMessageDialog(null, "Done!", "Output", JOptionPane.PLAIN_MESSAGE);
                 } catch (SQLException | HistoryNotFound ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Output", JOptionPane.PLAIN_MESSAGE);
                 } catch (NullPointerException e) {
@@ -284,7 +137,6 @@ public class AdminMenu extends BaseMenuFrame {
                         int t = candidateName.indexOf(" ");
                         candidateName = candidateName.substring(0, t);
                         votingService.deleteById(Integer.parseInt(candidateName));
-                        JOptionPane.showMessageDialog(null, "Done!", "Output", JOptionPane.PLAIN_MESSAGE);
                     } catch (SQLException | VotingNotFound | UserNotFound ex) {
                         JOptionPane.showMessageDialog(null, ex.getMessage(), "Output", JOptionPane.PLAIN_MESSAGE);
                     } catch (NullPointerException e) {
@@ -303,7 +155,7 @@ public class AdminMenu extends BaseMenuFrame {
                 }
             }
         }
-        if(votionComboBox.isEnabled()) updateVotion();
+        if(votionComboBox.isEnabled()) updateVoting();
         else update();
     }
 
@@ -311,10 +163,10 @@ public class AdminMenu extends BaseMenuFrame {
 
     }
 
-    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) throws SQLException, ListIsEmpty {
+    private void UCVComboBoxActionPerformed(java.awt.event.ActionEvent evt) {
 
         title = (String) UCVComboBox.getModel().getSelectedItem();
-
+        System.out.println("kkuhkj");
         switch (title) {
             case "Users": {
                 try {
@@ -333,7 +185,7 @@ public class AdminMenu extends BaseMenuFrame {
                     votionComboBox.setModel(new javax.swing.DefaultComboBoxModel());
                     votionComboBox.setEnabled(false);
                     break;
-                } catch (NullPointerException e) {
+                } catch (NullPointerException | ListIsEmpty | SQLException e) {
                     jList1.setModel(new javax.swing.AbstractListModel() {
                         String[] strings = {""};
 
@@ -350,6 +202,7 @@ public class AdminMenu extends BaseMenuFrame {
             }
             case "History": {
                 try {
+                    System.out.println("fist try");
                     votionComboBox.setEnabled(false);
                     jList1.setModel(new javax.swing.AbstractListModel() {
                         String[] strings = historyService.getHistoryArray();
@@ -365,10 +218,32 @@ public class AdminMenu extends BaseMenuFrame {
                     votionComboBox.setModel(new javax.swing.DefaultComboBoxModel());
                     votionComboBox.setEnabled(false);
                     break;
-                } catch (NullPointerException e) {
+                } catch (NullPointerException | ListIsEmpty | SQLException e) {
+                    System.out.println("catch");
+                    jList1.setModel(new javax.swing.DefaultListModel());
+//                    jList1.setModel(new javax.swing.AbstractListModel() {
+//                        String[] strings = {""};
+//
+//                        public int getSize() {
+//                            return strings.length;
+//                        }
+//
+//                        public Object getElementAt(int i) {
+//                            return strings[i];
+//                        }
+//                    });
+                    votionComboBox.setModel(new javax.swing.DefaultComboBoxModel());
+                    votionComboBox.setEnabled(false);
+                    break;
+                }
+            }
+            case "Votions": {
+                votionTitle = "*All*";
+                try {
                     jList1.setModel(new javax.swing.AbstractListModel() {
-                        String[] strings = {""};
+                        String[] strings = votingService.getVotingArray();
 
+                        //                    String[] strings = votionService.getAll().;
                         public int getSize() {
                             return strings.length;
                         }
@@ -377,29 +252,21 @@ public class AdminMenu extends BaseMenuFrame {
                             return strings[i];
                         }
                     });
-                    break;
+
+                    votionComboBox.setModel(
+                            new javax.swing.DefaultComboBoxModel(
+                                    votingService.getVotingTitleArrayWithNull()
+                            )
+                    );
+                }catch (SQLException | ListIsEmpty e){
+                    jList1.setModel(new javax.swing.DefaultListModel());
+                    votionComboBox.setModel(
+                            new javax.swing.DefaultComboBoxModel(
+                                    new String[]{"*All*"}
+                            )
+                    );
+
                 }
-            }
-            case "Votions": {
-                votionTitle = "*All*";
-                jList1.setModel(new javax.swing.AbstractListModel() {
-                    String[] strings = votingService.getVotionArray();
-
-                    //                    String[] strings = votionService.getAll().;
-                    public int getSize() {
-                        return strings.length;
-                    }
-
-                    public Object getElementAt(int i) {
-                        return strings[i];
-                    }
-                });
-
-                votionComboBox.setModel(
-                        new javax.swing.DefaultComboBoxModel(
-                                votingService.getVotionTitleArrayWithNull()
-                        )
-                );
                 votionComboBox.setEnabled(true);
                 break;
             }
@@ -408,12 +275,12 @@ public class AdminMenu extends BaseMenuFrame {
         }
     }
 
-    private void votionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {
+    private void votingComboBoxActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             votionTitle = (String)votionComboBox.getModel().getSelectedItem();
             if (votionTitle.equals("*All*")) {
                 jList1.setModel(new javax.swing.AbstractListModel() {
-                    String[] strings = votingService.getVotionArray();
+                    String[] strings = votingService.getVotingArray();
 
                     public int getSize() {
                         return strings.length;
@@ -438,18 +305,20 @@ public class AdminMenu extends BaseMenuFrame {
                     }
                 });
             }
-        } catch (NullPointerException e) {
-            jList1.setModel(new javax.swing.AbstractListModel() {
-                String[] strings = {""};
-
-                public int getSize() {
-                    return strings.length;
-                }
-
-                public Object getElementAt(int i) {
-                    return strings[i];
-                }
-            });
+        } catch (NullPointerException | ListIsEmpty e) {
+            jList1.setModel(new javax.swing.DefaultListModel()
+//            {
+//                String[] strings = {""};
+//
+//                public int getSize() {
+//                    return strings.length;
+//                }
+//
+//                public Object getElementAt(int i) {
+//                    return strings[i];
+//                }
+//            });
+            );
         } catch (SQLException | UserNotFound | VotingNotFound ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Output", JOptionPane.PLAIN_MESSAGE);
         }
@@ -481,17 +350,158 @@ public class AdminMenu extends BaseMenuFrame {
     private UserAddFrame userAddFrame;
 
     public void update() {
-        try {
-            this.jComboBox3ActionPerformed(new java.awt.event.ActionEvent(new Object(), 0, title));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ListIsEmpty listIsEmpty) {
-            listIsEmpty.printStackTrace();
-        }
+            this.UCVComboBoxActionPerformed(new java.awt.event.ActionEvent(new Object(), 0, title));
     }
-    public void updateVotion() {
-        System.out.println("voting update");
-            this.votionComboBoxActionPerformed(new java.awt.event.ActionEvent(new Object(), 0, votionTitle));
 
+    public void updateVoting() {
+        System.out.println("voting update");
+            this.votingComboBoxActionPerformed(new java.awt.event.ActionEvent(new Object(), 0, votionTitle));
     }
+
+
+    @SuppressWarnings("unchecked")
+    private void initComponents() throws SQLException, ListIsEmpty {
+
+        this.setBounds(400, 150, 500, 300);
+        jLabel1 = new javax.swing.JLabel();
+        logOffButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList();
+        UCVComboBox = new javax.swing.JComboBox();
+        addButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
+        editButton = new javax.swing.JButton();
+        resultsButton = new javax.swing.JButton();
+        votionComboBox = new javax.swing.JComboBox();
+        editButton.setEnabled(false);
+
+        votionComboBox.setEnabled(false);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("You are logged as : " + currentUser.getName());
+
+        logOffButton.setText("Log off");
+        logOffButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logOffButtonActionPerformed(evt);
+            }
+
+        });
+
+        jList1.setModel(new javax.swing.AbstractListModel() {
+
+            String[] strings = userService.getUserArray();
+
+            public int getSize() {
+                return strings.length;
+            }
+
+            public Object getElementAt(int i) {
+                return strings[i];
+            }
+        });
+        jScrollPane1.setViewportView(jList1);
+
+        UCVComboBox.setModel(new javax.swing.DefaultComboBoxModel(
+                        new String[]{"Users", "History", "Votions"})
+        );
+        UCVComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    UCVComboBoxActionPerformed(evt);
+            }
+        });
+
+        addButton.setText("ADD");
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
+
+        deleteButton.setText("DELETE");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+
+        editButton.setText("EDIT");
+        editButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editButtonActionPerformed(evt);
+            }
+        });
+
+        resultsButton.setText("RESULTS");
+        resultsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resultsButtonActionPerformed(evt);
+            }
+        });
+
+        votionComboBox.setModel(new javax.swing.DefaultComboBoxModel());
+        votionComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                votingComboBoxActionPerformed(evt);
+            }
+        });
+
+// <editor-fold defaultstate="collapsed" desc="Generated Code">
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                                                .addComponent(logOffButton)
+                                                .addContainerGap())
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(UCVComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(18, 18, 18)
+                                                                .addComponent(votionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(resultsButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel1)
+                                        .addComponent(logOffButton))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(UCVComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(votionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(24, 24, 24)
+                                                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                                                .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(resultsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jScrollPane1))
+                                .addContainerGap())
+        );
+
+        pack();
+        this.setVisible(true);
+    }
+
 }

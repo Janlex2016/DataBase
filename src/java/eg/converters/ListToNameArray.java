@@ -28,7 +28,7 @@ public class ListToNameArray {
         return nameArray;
     }
     
-    public static  String[] getVotionTitleArrayWithNull(List<Votion> list){
+    public static  String[] getVotingTitleArrayWithNull(List<Votion> list){
 
         nameArray = new String[list.size()+1];
         nameArray[0] = "*All*";

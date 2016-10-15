@@ -1,6 +1,7 @@
 package eg.menu.addFrames;
 
 import eg.exceptions.IncorrectInput;
+import eg.main.Main;
 
 import java.sql.SQLException;
 
@@ -14,8 +15,11 @@ public class VotingAddFrame extends BaseAddFrame {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             votingService.add(titleTextField.getText());
+            titleTextField.setText("");
         } catch (SQLException | IncorrectInput ex) {
             showMessage(ex.getMessage(), messageDialogTitle);
+        }finally {
+            Main.getAdminMenu().updateVoting();
         }
     }
 
