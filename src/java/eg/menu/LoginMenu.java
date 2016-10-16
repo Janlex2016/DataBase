@@ -61,7 +61,6 @@ public class LoginMenu extends BaseMenuFrame implements ActionListener {
             showMessage(tablesDoNotExist.getMessage(), inputErrorText);
         }
 
-//        this.setAlwaysOnTop(true);
         this.setVisible(true);
     }
 

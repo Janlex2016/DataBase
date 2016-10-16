@@ -105,7 +105,6 @@ public class UserAddFrame extends BaseAddFrame {
             }
         });
 
-        // <editor-fold defaultstate="collapsed" desc="Generated Code">
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(

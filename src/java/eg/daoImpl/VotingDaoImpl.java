@@ -15,6 +15,7 @@ import eg.models.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VotingDaoImpl implements VotingDao {
@@ -29,11 +30,9 @@ public class VotingDaoImpl implements VotingDao {
 
     @Override
     public boolean deleteById(int id) throws SQLException {
-        System.out.println(id + "voting id");
         ConnectionToDataBase.getConnection().insert(
                 "CALL VotingDataBase.DELETE_VOTING("+id+");"
         );
-
         return true;
     }
 
@@ -45,24 +44,24 @@ public class VotingDaoImpl implements VotingDao {
     }
 
     @Override
-    public Voting getUserById(int id) throws SQLException {
+    public Voting getById(int id) throws SQLException {
         String input = String.format("VOTING WHERE ID='%1$d'", id);
-        ResultSet rs = ConnectionToDataBase.getConnection().query(input);
-//        ResultSet rs = ConnectionToDataBase.getConnection().query("Votion WHERE id='"+id+"'");
+        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom(input);
+//        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom("Votion WHERE id='"+id+"'");
         return Converter.convertResultSetToVoting(rs);
     }
 
     @Override
     public Voting getByName(String name) throws SQLException {
         String input = String.format("VOTING WHERE TITLE='%1$s'", name);
-        ResultSet rs = ConnectionToDataBase.getConnection().query(input);
-//        ResultSet rs = ConnectionToDataBase.getConnection().query("Votion WHERE title='"+name+"'");
+        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom(input);
+//        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom("Votion WHERE title='"+name+"'");
         return Converter.convertResultSetToVoting(rs);
     }
 
     @Override
     public List<Voting> getAll() throws SQLException {
-        ResultSet rs = ConnectionToDataBase.getConnection().query("VOTING");
+        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom("VOTING");
         return ListConverter.convertResultSetToVotionList(rs);
     }
 
@@ -74,8 +73,8 @@ public class VotingDaoImpl implements VotingDao {
     @Override
     public List<History> getVotingWithCandidatesList(int votingId) throws SQLException {
         String input = String.format("VOTING_CANDIDATES WHERE VOTING_ID='%1$d'", votingId);
-        ResultSet rs = ConnectionToDataBase.getConnection().query(input);
-//        ResultSet rs = ConnectionToDataBase.getConnection().query("VotionTab WHERE VotionId='"+votionId+"'");
+        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom(input);
+//        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom("VotionTab WHERE VotionId='"+votionId+"'");
         return ListConverter.convertResultSetToVotingWithCandidatesList(rs);
     }
 
@@ -86,8 +85,20 @@ public class VotingDaoImpl implements VotingDao {
     }
 
     @Override
-    public void deleteCandidateFromVotion(int candidateId, int votionId) throws SQLException {
+    public void deleteCandidateFromVoting(int candidateId, int votionId) throws SQLException {
         String input = String.format("DELETE FROM VOTING_CANDIDATES WHERE CANDIDATE_ID=%1$d AND VOTING_ID=%2$d", candidateId, votionId);
         ConnectionToDataBase.getConnection().insert(input);
     }
+
+    @Override
+    public List<History> getResults(int votingId) throws SQLException{
+
+        List<History> resultList = new ArrayList<>();
+        ResultSet rs = ConnectionToDataBase.getConnection().insertText(
+                "CALL VotingDataBase.GET_RESULTS_WITH_VOTING_ID(" + votingId + ");"
+        );
+        resultList = ListConverter.convertResultSetToVotingResultList(rs);
+        return resultList;
+    }
+
 }

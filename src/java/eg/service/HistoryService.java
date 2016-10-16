@@ -20,11 +20,11 @@ import java.util.List;
 public interface HistoryService{
     
     public void add(int candidateId, int votionId, int userId) throws SQLException,AccessDenied,IncorrectInput, CandidateNotFound, UserNotFound, VotingNotFound;
-    public boolean isThereVotionAndUserId(int votionId, int userId) throws SQLException;
+    public boolean isThereVotingAndUserId(int votionId, int userId) throws SQLException;
     public List<History> countVoices(int votionId) throws SQLException;
     public void deleteById(int id)throws SQLException,HistoryNotFound;
     public List<History> getAll()throws SQLException,HistoryNotFound,ListIsEmpty;
     public History getById(int id) throws SQLException,HistoryNotFound;
     public String[] getHistoryArray() throws SQLException, ListIsEmpty;
-    public List<User> rewrited(List<History> list) throws SQLException, ListIsEmpty;
+    public List<User> getHistoryList(List<History> list) throws SQLException, ListIsEmpty;
 }

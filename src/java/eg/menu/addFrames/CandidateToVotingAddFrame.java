@@ -24,8 +24,7 @@ public class CandidateToVotingAddFrame extends BaseAddFrame {
         if (candidateList.getSelectedValue() != null) {
             try {
                 votingService.addCandidateToVoting(
-                        userService.getCandidateByName(
-                                candidateList.getSelectedValue().toString()).getId(), votingId);
+                        userService.getCandidateByName(candidateList.getSelectedValue().toString()).getId(), votingId);
                 refreshCandidateList();
             } catch (AccessDenied | CandidateNotFound | SQLException | UserNotFound | VotingNotFound ex) {
                 showMessage(ex.getMessage(), messageDialogTitle);
@@ -43,6 +42,8 @@ public class CandidateToVotingAddFrame extends BaseAddFrame {
             candidateList.setModel(createModel(candidateArray));
         } catch (SQLException | UserNotFound e) {
             showMessage(e.getMessage(), messageDialogTitle);
+        }catch (NullPointerException ex){
+
         }
     }
 

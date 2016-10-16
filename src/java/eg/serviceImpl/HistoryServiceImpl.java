@@ -19,14 +19,14 @@ public class HistoryServiceImpl implements HistoryService{
     private final VotingDao votingDao = DaoFactory.getVotingDao();
     
     @Override
-    public void add(int candidateId, int votionId, int userId) throws SQLException, AccessDenied,CandidateNotFound,UserNotFound,VotingNotFound, IncorrectInput{
-        if(candidateId<1||votionId<1||userId<1) throw new IncorrectInput();
-        if(userDao.getUserById(candidateId)==null) throw new CandidateNotFound();
-        if(userDao.getUserById(userId)==null) throw new UserNotFound();
-        if(userDao.getUserById(candidateId).getAccess()!=Access.CANDIDATE) throw new AccessDenied("User "+userDao.getUserById(candidateId)+" isn't candidate");
-        if(userDao.getUserById(userId).getAccess()!=Access.USER) throw new AccessDenied((userDao.getUserById(userId).getAccess()!=Access.USER)+" : "+userDao.getUserById(userId).getAccess()+" : "+userDao.getUserById(userId).getName());
-        if(votingDao.getUserById(votionId)==null) throw new VotingNotFound();
-        historyDao.add(new History(0, candidateId, votionId, userId));
+    public void add(int candidateId, int votingId, int userId) throws SQLException, AccessDenied,CandidateNotFound,UserNotFound,VotingNotFound, IncorrectInput{
+        if(candidateId<1||votingId<1||userId<1) throw new IncorrectInput();
+        if(userDao.getById(candidateId)==null) throw new CandidateNotFound();
+        if(userDao.getById(userId)==null) throw new UserNotFound();
+        if(userDao.getById(candidateId).getAccess()!=Access.CANDIDATE) throw new AccessDenied("User "+userDao.getById(candidateId)+" isn't candidate");
+        if(userDao.getById(userId).getAccess()!=Access.USER) throw new AccessDenied((userDao.getById(userId).getAccess()!=Access.USER)+" : "+userDao.getById(userId).getAccess()+" : "+userDao.getById(userId).getName());
+        if(votingDao.getById(votingId)==null) throw new VotingNotFound();
+        historyDao.add(new History(0, candidateId, votingId, userId));
     }
 
     @Override
@@ -39,19 +39,19 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override
     public History getById(int historyId) throws SQLException, HistoryNotFound{
-        History history = historyDao.getUserById(historyId);
+        History history = historyDao.getById(historyId);
         if(history==null) throw new HistoryNotFound();
         return history;
     }
 
     @Override
     public void deleteById(int historyId) throws SQLException, HistoryNotFound{
-        
+        getById(historyId);
         historyDao.deleteById(historyId);
     }
 
     @Override
-    public boolean isThereVotionAndUserId(int votionId, int userId) throws SQLException {
+    public boolean isThereVotingAndUserId(int votionId, int userId) throws SQLException {
         return historyDao.isThereVotingAndUserId(votionId, userId);
     }
 
@@ -69,15 +69,15 @@ public class HistoryServiceImpl implements HistoryService{
     
     @Override
     public String[] getHistoryArray() throws SQLException, ListIsEmpty {
-        return ListToArray.getHistoryArray(rewrited(getAll()));
+        return ListToArray.getHistoryArray(getHistoryList(getAll()));
     }
 
     @Override
-    public List<User> rewrited(List<History> hlist) throws SQLException, ListIsEmpty {
+    public List<User> getHistoryList(List<History> hlist) throws SQLException, ListIsEmpty {
         
         List<User> ulist = new ArrayList<>();
         for(History h:hlist){
-            ulist.add(new User(h.getHistoryId(), userDao.getUserById(h.getCandidateId()).getName(), votingDao.getUserById(h.getVotionId()).getTitle(), userDao.getUserById(h.getUserId()).getName(), "USER"));
+            ulist.add(new User(h.getHistoryId(), userDao.getCandidateById(h.getCandidateId()).getName(), votingDao.getById(h.getVotionId()).getTitle(), userDao.getById(h.getUserId()).getName(), "USER"));
         }
         
         return ulist;

@@ -25,10 +25,7 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public boolean deleteById(int id) throws SQLException{
-        if(getUserById(id)==null) return false;
-        String input = String.format("DELETE FROM USERS WHERE ID=%1$d", id);
-        ConnectionToDataBase.getConnection().insert(input);
-//        ConnectionToDataBase.getConnection().insert("DELETE FROM Users WHERE id='"+id+"'");
+        ConnectionToDataBase.getConnection().insert("CALL VotingDataBase.DELETE_USER("+id+");");
         return true;
     }
 
@@ -47,71 +44,71 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public List<User> getAllCandidates() throws SQLException {
-        ResultSet rs = ConnectionToDataBase.getConnection().query("CANDIDATES");
+        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom("CANDIDATES");
         return ListConverter.convertResultSetToCandidateList(rs);
     }
 
-    @Override
-    public boolean deleteByName(String name) throws SQLException{
-        
-        if(getByName(name)==null) return false;
-        String input = String.format("DELETE FROM USERS WHERE name='%1$s", name);
-        ConnectionToDataBase.getConnection().insert(input);   
-//        ConnectionToDataBase.getConnection().insert("DELETE FROM Users WHERE name='"+name+"'");   
-        return true;
-    }
+//    @Override
+//    public boolean deleteByName(String name) throws SQLException{
+//
+//        if(getByName(name)==null) return false;
+//        String input = String.format("DELETE FROM USERS WHERE name='%1$s", name);
+//        ConnectionToDataBase.getConnection().insert(input);
+////        ConnectionToDataBase.getConnection().insert("DELETE FROM Users WHERE name='"+name+"'");
+//        return true;
+//    }
 
     @Override
-    public User getUserById(int id) throws SQLException{
+    public User getById(int id) throws SQLException{
         String input = String.format("USERS WHERE ID='%1$d'", id);
-        ResultSet rs = ConnectionToDataBase.getConnection().query(input);
-//        ResultSet rs = ConnectionToDataBase.getConnection().query("Users WHERE id='"+id+"'");
+        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom(input);
+//        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom("Users WHERE id='"+id+"'");
         return Converter.convertResultSetToUser(rs);
     }
 
     @Override
     public User getCandidateById(int id) throws SQLException{
         String input = String.format("CANDIDATES WHERE ID='%1$d'", id);
-        ResultSet rs = ConnectionToDataBase.getConnection().query(input);
-//        ResultSet rs = ConnectionToDataBase.getConnection().query("Users WHERE id='"+id+"'");
+        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom(input);
+//        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom("Users WHERE id='"+id+"'");
         return Converter.convertResultSetToCandidate(rs);
     }
 
     @Override
     public User getByName(String name) throws SQLException{
         String input = String.format("USERS WHERE name='%1$s'", name);
-        ResultSet rs = ConnectionToDataBase.getConnection().query(input);
-//        ResultSet rs = ConnectionToDataBase.getConnection().query("Users WHERE name='"+name+"'");
+        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom(input);
+//        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom("Users WHERE name='"+name+"'");
         return Converter.convertResultSetToUser(rs);
     }
 
     @Override
     public User getCandidateByName(String name) throws SQLException{
         String input = String.format("CANDIDATES WHERE NAME='%1$s'", name);
-        ResultSet rs = ConnectionToDataBase.getConnection().query(input);
-//        ResultSet rs = ConnectionToDataBase.getConnection().query("Users WHERE name='"+name+"'");
+        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom(input);
+//        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom("Users WHERE name='"+name+"'");
         return Converter.convertResultSetToCandidate(rs);
     }
     
     @Override
     public List<User> getAll() throws SQLException {
-        ResultSet rs = ConnectionToDataBase.getConnection().query("USERS");
+        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom("USERS");
         return ListConverter.convertResultSetToUserList(rs);
     }
 
     @Override
     public List<User> getUsersByAccess(String access) throws SQLException {
         String input = String.format("USERS WHERE access='%1$s'", access);
-        ResultSet rs = ConnectionToDataBase.getConnection().query(input);
-//        ResultSet rs = ConnectionToDataBase.getConnection().query("Users WHERE access='"+access+"'");
+        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom(input);
+//        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom("Users WHERE access='"+access+"'");
         return ListConverter.convertResultSetToUserList(rs);
     }
 
     @Override
     public User enter(String login, String password) throws SQLException {
         String input = String.format("USERS WHERE login='%1$s' AND password='%2$s'", login,password);
-        ResultSet rs = ConnectionToDataBase.getConnection().query(input);
-//        ResultSet rs = ConnectionToDataBase.getConnection().query("Users WHERE login='"+login+"' AND password='"+password+"'");
+        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom(input);
+//        ResultSet rs = ConnectionToDataBase.getConnection().selectFrom("Users WHERE login='"+login+"' AND password='"+password+"'");
         return Converter.convertResultSetToUser(rs);
     }
 }

@@ -37,5 +37,9 @@ public class Converter {
         return new Voting(rs.getInt("ID"),rs.getString("TITLE"));
     }
 
+    public static History convertResultSetToVotingResults(ResultSet rs) throws SQLException{
+        if(!rs.next()) return null;
+        return new History(rs.getInt("ID"),rs.getInt("CANDIDATE_ID"), rs.getInt("VOTING_ID"), rs.getInt("VOTES"));
+    }
  }
 

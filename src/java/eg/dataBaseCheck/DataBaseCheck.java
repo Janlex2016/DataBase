@@ -18,9 +18,15 @@ public class DataBaseCheck {
         } catch (TablesDoNotExist ex) {
             System.out.println("Creating tables!");
             createTables();
+            createProcedures();
         } catch (SQLException ex) {
             throw new SQLException("Connection problem");
         }
+    }
+
+    private void checkIfTableExist() throws SQLException, TablesDoNotExist {
+        ResultSet rs = ConnectionToDataBase.getConnection().insertText("SHOW TABLES;");
+        if (!rs.first()) throw new TablesDoNotExist();
     }
 
     private void createTables() throws SQLException {
@@ -30,8 +36,14 @@ public class DataBaseCheck {
         createVotingTable();
         createVotingCandidatesTable();
         createDefaultAdmin();
+    }
+
+    private void createProcedures() throws SQLException{
         createDeleteVotingProcedure();
         createDeleteCandidateProcedure();
+        createDeleteUserProcedure();
+        createDeleteHistoryProcedure();
+        createGetResultsProcedure();
     }
 
     private void createUsersTable() throws SQLException {
@@ -40,7 +52,7 @@ public class DataBaseCheck {
                         "(\n" +
                         "ID Integer PRIMARY KEY AUTO_INCREMENT,\n" +
                         "NAME varchar(40) NOT NULL,\n" +
-                        "LOGIN varchar(40) UNIQUE DEFAULT NULL,\n" +
+                        "LOGIN varchar(40) NOT NULL UNIQUE ,\n" +
                         "PASSWORD varchar(40) NOT NULL,\n" +
                         "ACCESS varchar(40) NOT NULL\n" +
                         ")"
@@ -50,84 +62,97 @@ public class DataBaseCheck {
     private void createCandidatesTable() throws SQLException {
         ConnectionToDataBase.getConnection().insert(
                 "CREATE TABLE CANDIDATES\n" +
-                        "(\n" +
-                        "ID Integer PRIMARY KEY AUTO_INCREMENT,\n" +
-                        "NAME varchar(40) NOT NULL UNIQUE,\n" +
-                        "ACCESS varchar(40) NOT NULL\n" +
-                        ")"
+                "(\n" +
+                "ID Integer PRIMARY KEY AUTO_INCREMENT,\n" +
+                "NAME varchar(40) NOT NULL UNIQUE,\n" +
+                "ACCESS varchar(40) NOT NULL\n" +
+                ")"
         );
     }
 
     private void createHistoryTable() throws SQLException {
         ConnectionToDataBase.getConnection().insert(
                 "CREATE TABLE HISTORY\n" +
-                        "(\n" +
-                        "ID Integer PRIMARY KEY AUTO_INCREMENT,\n" +
-                        "CANDIDATE_ID Integer NOT NULL,\n" +
-                        "VOTING_ID Integer NOT NULL,\n" +
-                        "USER_ID Integer NOT NULL\n" +
-                        ")"
+                "(\n" +
+                "ID Integer PRIMARY KEY AUTO_INCREMENT,\n" +
+                "CANDIDATE_ID Integer NOT NULL,\n" +
+                "VOTING_ID Integer NOT NULL,\n" +
+                "USER_ID Integer NOT NULL\n" +
+                ")"
         );
     }
 
     private void createVotingTable() throws SQLException {
         ConnectionToDataBase.getConnection().insert(
                 "CREATE TABLE VOTING\n" +
-                        "(\n" +
-                        "ID Integer PRIMARY KEY AUTO_INCREMENT,\n" +
-                        "TITLE varchar(40) NOT NULL UNIQUE\n" +
-                        ")"
+                "(\n" +
+                "ID Integer PRIMARY KEY AUTO_INCREMENT,\n" +
+                "TITLE varchar(40) NOT NULL UNIQUE\n" +
+                ")"
         );
     }
 
     private void createVotingCandidatesTable() throws SQLException {
         ConnectionToDataBase.getConnection().insert(
                 "CREATE TABLE VOTING_CANDIDATES\n" +
-                        "(\n" +
-                        "ID Integer PRIMARY KEY AUTO_INCREMENT,\n" +
-                        "CANDIDATE_ID varchar(40) NOT NULL,\n" +
-                        "VOTING_ID varchar(40) NOT NULL\n" +
-                        ")"
+                "(\n" +
+                "ID Integer PRIMARY KEY AUTO_INCREMENT,\n" +
+                "CANDIDATE_ID varchar(40) NOT NULL,\n" +
+                "VOTING_ID varchar(40) NOT NULL\n" +
+                ")"
         );
     }
-    private void createDeleteVotingProcedure() throws SQLException {
-        ConnectionToDataBase.getConnection().insertText(
-                "DELIMITER // \n" +
-                "\n" +
-                "CREATE PROCEDURE `DELETE_VOTING` (IN VOTING_ID INT) \n" +
-                "LANGUAGE SQL \n" +
-                "COMMENT 'Voting delete' \n" +
-                "BEGIN \n" +
-                "        \n" +
-                "SET SQL_SAFE_UPDATES = 0;\n" +
-                "\n" +
-                "DELETE VOTING\n" +
-                "    FROM VOTING\n" +
-                "    WHERE VOTING.ID = VOTING_ID;\n" +
-                "\n" +
-                "DELETE VOTING_CANDIDATES\n" +
-                "    FROM VOTING_CANDIDATES\n" +
-                "    WHERE VOTING_CANDIDATES.VOTING_ID = VOTING_ID;\n" +
-                "\n" +
-                "DELETE HISTORY\n" +
-                "    FROM HISTORY\n" +
-                "    WHERE HISTORY.VOTING_ID = VOTING_ID;\n" +
-                "\n" +
-                "END// "
+    public void createDeleteVotingProcedure() throws SQLException {
+        ConnectionToDataBase.getConnection().go(
+                "DROP PROCEDURE IF EXISTS `VotingDataBase`.`DELETE_VOTING`");
+        ConnectionToDataBase.getConnection().go(
+                "CREATE PROCEDURE `VotingDataBase`.`DELETE_VOTING` (IN VOTING_ID INT)\n" +
+                        "BEGIN \n" +
+                        "SET SQL_SAFE_UPDATES = 0;\n" +
+                        "DELETE VOTING\n" +
+                        "FROM VOTING\n" +
+                        "WHERE VOTING.ID = VOTING_ID;\n" +
+                        "\n" +
+                        "DELETE VOTING_CANDIDATES\n" +
+                        "FROM VOTING_CANDIDATES\n" +
+                        "WHERE VOTING_CANDIDATES.VOTING_ID = VOTING_ID;\n" +
+                        "\n" +
+                        "DELETE HISTORY\n" +
+                        "FROM HISTORY\n" +
+                        "WHERE HISTORY.VOTING_ID = VOTING_ID;\n" +
+                        "\n" +
+                        "END"
+
         );
     }
 
-    private void createDeleteCandidateProcedure() throws SQLException {
-        ConnectionToDataBase.getConnection().insertText(
-                "DELIMITER // \n" +
-                "\n" +
-                "CREATE PROCEDURE `DELETE_CANDIDATE` (IN CANDIDATE_ID INT) \n" +
-                "LANGUAGE SQL \n" +
-                "COMMENT 'Candidate delete' \n" +
-                "BEGIN \n" +
-                "\n" +
+    public void createDeleteUserProcedure() throws SQLException {
+        ConnectionToDataBase.getConnection().go(
+                "DROP PROCEDURE IF EXISTS `VotingDataBase`.`DELETE_USER`");
+        ConnectionToDataBase.getConnection().go(
+                "CREATE PROCEDURE `VotingDataBase`.`DELETE_USER` (IN USER_ID INT)\n" +
+                        "BEGIN \n" +
+                        "SET SQL_SAFE_UPDATES = 0;\n" +
+                        "DELETE USERS\n" +
+                        "FROM USERS\n" +
+                        "WHERE USERS.ID = USER_ID;\n" +
+                        "\n"+
+                        "DELETE HISTORY\n" +
+                        "FROM HISTORY\n" +
+                        "WHERE HISTORY.USER_ID = USER_ID;\n" +
+                        "\n" +
+                        "END"
+
+        );
+    }
+
+    public  void createDeleteCandidateProcedure() throws SQLException {
+        ConnectionToDataBase.getConnection().go(
+                "DROP PROCEDURE IF EXISTS `VotingDataBase`.`DELETE_CANDIDATE`");
+        ConnectionToDataBase.getConnection().go(
+                "CREATE PROCEDURE `VotingDataBase`.`DELETE_CANDIDATE` (IN CANDIDATE_ID INT)\n" +
+                "BEGIN\n" +
                 "SET SQL_SAFE_UPDATES = 0;\n" +
-                "\n" +
                 "DELETE CANDIDATES\n" +
                 "    FROM CANDIDATES\n" +
                 "    WHERE CANDIDATES.ID = CANDIDATE_ID;\n" +
@@ -138,49 +163,80 @@ public class DataBaseCheck {
                 "\n" +
                 "DELETE HISTORY\n" +
                 "    FROM HISTORY\n" +
-                "    WHERE HISTORY.CANDIDATE_ID = CANDIDATE_ID;\n" +
-                "\n" +
-                "END// "
+                "    WHERE HISTORY.CANDIDATE_ID = CANDIDATE_ID;" +
+                "END"
+
+        );
+    }
+
+    public void createDeleteHistoryProcedure() throws SQLException {
+        ConnectionToDataBase.getConnection().go(
+                "DROP PROCEDURE IF EXISTS `VotingDataBase`.`DELETE_HISTORY`");
+        ConnectionToDataBase.getConnection().go(
+                "CREATE PROCEDURE `VotingDataBase`.`DELETE_HISTORY` (IN HISTORY_ID INT)\n" +
+                        "BEGIN \n" +
+                        "SET SQL_SAFE_UPDATES = 0;\n" +
+                        "DELETE HISTORY\n" +
+                        "FROM HISTORY\n" +
+                        "WHERE HISTORY.ID = HISTORY_ID;\n" +
+                        "\n" +
+                        "END"
+
+        );
+    }
+
+    public void createGetResultsProcedure() throws SQLException {
+        ConnectionToDataBase.getConnection().go(
+                "DROP PROCEDURE IF EXISTS `VotingDataBase`.`GET_RESULTS_WITH_VOTING_ID``");
+        ConnectionToDataBase.getConnection().go(
+                "CREATE PROCEDURE `VotingDataBase`.`GET_RESULTS_WITH_VOTING_ID` (IN GET_VOTING_ID INT)\n" +
+                        "BEGIN\n" +
+                        "    SELECT V.VOTING_ID, V.CANDIDATE_ID, \n" +
+                        "    (select count(USER_ID) \n" +
+                        "    from HISTORY H\n" +
+                        "    WHERE H.VOTING_ID=V.VOTING_ID AND H.CANDIDATE_ID=V.CANDIDATE_ID\n" +
+                        "    group by VOTING_ID, CANDIDATE_ID) AS VOTES\n" +
+                        "    FROM VOTING_CANDIDATES V\n" +
+                        "    WHERE V.VOTING_ID = GET_VOTING_ID;\n" +
+                        "END"
         );
     }
 
     private void createDefaultAdmin() throws SQLException {
         ConnectionToDataBase.getConnection().insert(
-                "INSERT INTO USERS (NAME, LOGIN, PASSWORD, ACCESS) VALUES\n"+
+                "INSERT INTO USERS (NAME, LOGIN, PASSWORD, ACCESS) VALUES\n" +
                 "('admin', 'admin', 'admin', 'ADMIN');");
     }
 
-    private void checkIfTableExist() throws SQLException, TablesDoNotExist {
-        ResultSet rs = ConnectionToDataBase.getConnection().insertText("SHOW TABLES;");
-        if (!rs.first()) throw new TablesDoNotExist();
+    public void testProcedure() throws SQLException {
+//        ConnectionToDataBase.getConnection().go(
+//                "DROP PROCEDURE IF EXISTS `VotingDataBase`.`DELETE_CANDIDATE`");
+//        ConnectionToDataBase.getConnection().go(
+//                "CREATE PROCEDURE `VotingDataBase`.`DELETE_CANDIDATE` \n" +
+//                "   (IN CANDIDATE_ID INT)\n" +
+//                "BEGIN\n" +
+//                "SET SQL_SAFE_UPDATES = 0;\n"+
+//                "DELETE CANDIDATES\n" +
+//                "    FROM CANDIDATES\n" +
+//                "    WHERE CANDIDATES.ID = CANDIDATE_ID;\n"+
+//                "\n"+
+//                "DELETE VOTING_CANDIDATES\n" +
+//                "    FROM VOTING_CANDIDATES\n" +
+//                "    WHERE VOTING_CANDIDATES.CANDIDATE_ID = CANDIDATE_ID;\n" +
+//                "\n" +
+//                "DELETE HISTORY\n" +
+//                "    FROM HISTORY\n" +
+//                "    WHERE HISTORY.CANDIDATE_ID = CANDIDATE_ID;"+
+//                "END");
+//                "CREATE PROCEDURE `VotingDataBase`.`GET_RESULTS_WITH_VOTING_ID` (IN GET_VOTING_ID INT)\n" +
+//                "BEGIN\n" +
+//                "    SELECT V.VOTING_ID, V.CANDIDATE_ID, \n" +
+//                "    (select count(USER_ID) \n" +
+//                "    from HISTORY H\n" +
+//                "    WHERE H.VOTING_ID=V.VOTING_ID AND H.CANDIDATE_ID=V.CANDIDATE_ID\n" +
+//                "    group by VOTING_ID, CANDIDATE_ID) AS VOTES\n" +
+//                "    FROM VOTING_CANDIDATES V\n" +
+//                "    WHERE V.VOTING_ID = GET_VOTING_ID;\n" +
+//                "END");
     }
-
-    String procedure1 =
-            "DELIMITER // \n" +
-            "\n" +
-            "CREATE PROCEDURE `COUNT_VOTES_WITH_CANDIDATE_ID_AND_VOTING_ID` (IN USER_ID INT, IN VOTING_ID INT) \n" +
-            "LANGUAGE SQL \n" +
-            "COMMENT 'Getting results' \n" +
-            "BEGIN \n" +
-            "    SELECT COUNT(*) FROM HISTORY H WHERE H.CANDIDATE_ID=USER_ID AND H.VOTING_ID=VOTING_ID; \n" +
-            "END// ";
-    String pr =
-            "DELIMITER // \n" +
-            "\n" +
-            "CREATE PROCEDURE `COUNT_VOTES_WITH_CANDIDATE_ID_AND_VOTING_ID` (IN USER_ID INT, IN VOTING_ID INT) \n" +
-            "LANGUAGE SQL \n" +
-            "COMMENT 'Getting results' \n" +
-            "BEGIN \n" +
-            "        \n" +
-            "SELECT\n" +
-            "    USERS.NAME AS 'Candidate name',  \n" +
-            "    (SELECT COUNT(*)\n" +
-            "    FROM HISTORY H \n" +
-            "    WHERE H.CANDIDATE_ID=USER_ID \n" +
-            "    AND H.VOTING_ID=VOTING_ID ) AS 'Votes'\n" +
-            "FROM USERS\n" +
-            "WHERE \n" +
-            "    USERS.ID=USER_ID\n" +
-            "    AND USERS.ACCESS='CANDIDATE';\n" +
-            "END// ";
 }

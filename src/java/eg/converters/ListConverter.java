@@ -75,4 +75,14 @@ public class ListConverter {
         }
         return tableNameList;
     }
+
+    public static List<History> convertResultSetToVotingResultList(ResultSet rs) throws SQLException {
+        List<History> resultsList = new ArrayList<>();
+        if(!rs.first()) return null;
+        rs.previous();
+        while(rs.next()){
+            resultsList.add(new History(0,rs.getInt("CANDIDATE_ID"), rs.getInt("VOTING_ID"), rs.getInt("VOTES")));
+        }
+        return resultsList;
+    }
 }

@@ -12,24 +12,31 @@ import eg.menu.addFrames.*;
 import eg.exceptions.ListIsEmpty;
 import eg.exceptions.UserNotFound;
 import eg.exceptions.VotingNotFound;
-import eg.models.History;
 import eg.models.User;
+import eg.models.enums.Models;
 
+import java.awt.event.ActionEvent;
 import java.sql.SQLException;
-import java.util.List;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 public class AdminMenu extends BaseMenuFrame {
-
-//    private User currentUser;
-//
-//    private UserService userService = ServiceFactory.getUserService();
-//    private HistoryService historyService = ServiceFactory.getHistoryService();
-//    private VotingService votingService = ServiceFactory.getVotingService();
 
     private String title;
     private String votingTitle;
     private String candidateName;
+    private static final String noCandidatesInVoting = "No candidates in this voting!";
+
+    private javax.swing.JButton logOffButton;
+    private javax.swing.JButton addButton;
+    private javax.swing.JButton deleteButton;
+    private javax.swing.JButton editButton;
+    private javax.swing.JButton resultsButton;
+    private javax.swing.JComboBox votingComboBox;
+    private javax.swing.JComboBox UCVComboBox;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JList jList1;
+    private javax.swing.JScrollPane jScrollPane1;
+
 
     public AdminMenu(User currentUser) throws SQLException, ListIsEmpty {
         title = "Users";
@@ -37,36 +44,17 @@ public class AdminMenu extends BaseMenuFrame {
         initComponents();
     }
 
-    // </editor-fold>
-
-
-
     private void resultsButtonActionPerformed(java.awt.event.ActionEvent evt) {
 
         if (title.equals("Votions") && votingTitle.equals("*All*")) {
-                try {
-
-
-                    candidateName = jList1.getSelectedValue().toString();
-                    int t = candidateName.indexOf(" ");
-                    candidateName = candidateName.substring(0, t);
-                    System.out.println("--------candidate : " + candidateName);
-                    int votingId = Integer.parseInt(candidateName);
-                    String votingTitle = votingService.getById(votingId).getTitle();
-                    //--------------------------
-                    List<History> historyList = historyService.countVoices(votingId);
-                    String[] history = new String[historyList.size()];
-                    for (int i = 0; i < historyList.size(); i++) {
-                        history[i] = "Candidate : " + userService.getById(historyList.get(i).getCandidateId()).getName() + ", " + historyList.get(i).getVotionId() + " votes";
-                    }
-
-                    //--------------------------
-                    new ResultFrame(history, votingTitle).setVisible(true);
-                }catch (NullPointerException ex){
-                    JOptionPane.showMessageDialog(null, "No candidates in this voting!", "Error", JOptionPane.PLAIN_MESSAGE);
-                } catch (SQLException | UserNotFound | VotingNotFound e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.PLAIN_MESSAGE);
-                }
+            try {
+                new ResultFrame(votingService.getResultArray(getSelectedIndex()), votingService.getById(getSelectedIndex()).getTitle()).setVisible(true);
+            } catch (NullPointerException ex) {
+                showMessage(noCandidatesInVoting, messageDialogTitle);
+            } catch (SQLException | UserNotFound | VotingNotFound | CandidateNotFound | AccessDenied e) {
+                showMessage(e.getMessage(), messageDialogTitle);
+                e.printStackTrace();
+            }
         }
     }
 
@@ -89,8 +77,7 @@ public class AdminMenu extends BaseMenuFrame {
                     try {
                         new CandidateToVotingAddFrame(votingService.getByName(votingTitle).getId());
                     } catch (VotingNotFound | UserNotFound | SQLException ex) {
-                        System.out.println(ex);
-                        System.out.println(votingTitle);
+                        showMessage(ex.getMessage(), messageDialogTitle);
                     }
                 break;
             default:
@@ -98,230 +85,152 @@ public class AdminMenu extends BaseMenuFrame {
         }
     }
 
+    private int getSelectedIndex() {
+        candidateName = jList1.getSelectedValue().toString();
+        int selectedIndex = candidateName.indexOf(" ");
+        candidateName = candidateName.substring(0, selectedIndex);
+        selectedIndex = Integer.parseInt(candidateName);
+        return selectedIndex;
+    }
+
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {
 
         switch (title) {
-
             case "Users": {
                 try {
-                    candidateName = jList1.getSelectedValue().toString();
-                    int t = candidateName.indexOf(" ");
-                    candidateName = candidateName.substring(0, t);
-                    votingService.deleteByCandidateId(Integer.parseInt(candidateName));
-                    userService.deleteById(Integer.parseInt(candidateName));
+                    if (getSelectedIndex() == 1) throw new UserNotFound("Don't delete admin");
+                    userService.deleteById(getSelectedIndex());
                 } catch (SQLException | UserNotFound ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Output", JOptionPane.PLAIN_MESSAGE);
-                    System.out.println(ex);
-
+                    showMessage(ex.getMessage(), messageDialogTitle);
                 } catch (NullPointerException e) {
+//                    e.printStackTrace();
                 }
                 break;
             }
             case "Candidates": {
                 try {
-                    candidateName = jList1.getSelectedValue().toString();
-                    int t = candidateName.indexOf(" ");
-                    candidateName = candidateName.substring(0, t);
-                    votingService.deleteByCandidateId(Integer.parseInt(candidateName));
-                    userService.deleteCandidate(Integer.parseInt(candidateName));
+//                    candidateName = jList1.getSelectedValue().toString();
+//                    int t = candidateName.indexOf(" ");
+//                    candidateName = candidateName.substring(0, t);
+                    userService.deleteCandidateById(getSelectedIndex());
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Output", JOptionPane.PLAIN_MESSAGE);
-                    System.out.println(ex);
-
+                    showMessage(ex.getMessage(), messageDialogTitle);
                 } catch (NullPointerException e) {
+//                    e.printStackTrace();
                 }
                 break;
             }
             case "History": {
                 try {
-                    candidateName = jList1.getSelectedValue().toString();
-                    int t = candidateName.indexOf(" ");
-                    candidateName = candidateName.substring(0, t);
-                    historyService.deleteById(Integer.parseInt(candidateName));
+//                    candidateName = jList1.getSelectedValue().toString();
+//                    int t = candidateName.indexOf(" ");
+//                    candidateName = candidateName.substring(0, t);
+                    historyService.deleteById(getSelectedIndex());
                 } catch (SQLException | HistoryNotFound ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Output", JOptionPane.PLAIN_MESSAGE);
+                    showMessage(ex.getMessage(), messageDialogTitle);
                 } catch (NullPointerException e) {
+//                    e.printStackTrace();
                 }
                 break;
             }
             case "Votions": {
                 if (votingTitle.equals("*All*")) {
                     try {
-                        candidateName = jList1.getSelectedValue().toString();
-                        int t = candidateName.indexOf(" ");
-                        candidateName = candidateName.substring(0, t);
-                        votingService.deleteById(Integer.parseInt(candidateName));
+//                        candidateName = jList1.getSelectedValue().toString();
+//                        int t = candidateName.indexOf(" ");
+//                        candidateName = candidateName.substring(0, t);
+                        votingService.deleteById(getSelectedIndex());
+                        updateVotingComboBox();
+                    } catch (ListIsEmpty lie) {
+                        votingComboBox.setModel(
+                                new DefaultComboBoxModel(
+                                        new String[]{"*All*"}
+                                )
+                        );
                     } catch (SQLException | VotingNotFound | UserNotFound ex) {
-                        JOptionPane.showMessageDialog(null, ex.getMessage(), "Output", JOptionPane.PLAIN_MESSAGE);
-                        ex.printStackTrace();
+                        showMessage(ex.getMessage(), messageDialogTitle);
+
                     } catch (NullPointerException e) {
+//                        e.printStackTrace();
                     }
                     break;
                 } else {
                     try {
                         candidateName = jList1.getSelectedValue().toString();
-                        votingService.deleteCandidateFromVotion(userService.getCandidateByName(candidateName).getId(), votingService.getByName(votingTitle).getId());
-                        JOptionPane.showMessageDialog(null, "Done!", "Output", JOptionPane.PLAIN_MESSAGE);
-                    } catch (SQLException | VotingNotFound | UserNotFound | AccessDenied | CandidateNotFound ex) {
-                        JOptionPane.showMessageDialog(null, ex.getMessage(), "Output", JOptionPane.PLAIN_MESSAGE);
+                        votingService.deleteCandidateFromVoting(userService.getCandidateByName(candidateName).getId(), votingService.getByName(votingTitle).getId());
+                        updateVotingComboBox();
+                    } catch (SQLException | ListIsEmpty | VotingNotFound | UserNotFound | AccessDenied | CandidateNotFound ex) {
+                        showMessage(ex.getMessage(), messageDialogTitle);
                     } catch (NullPointerException e) {
+//                        e.printStackTrace();
                     }
                     break;
                 }
             }
         }
-        if(votingComboBox.isEnabled()) updateVoting();
-        else update();
+        if (votingComboBox.isEnabled()) {
+            updateVoting();
+        } else update();
     }
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {
 
     }
 
-    private void UCHVComboBoxActionPerformed(java.awt.event.ActionEvent evt) {
+    //TODO AFTER DELETE VOTING
+
+
+    private void UCHVComboBoxActionPerformed(ActionEvent evt) {
+        votingComboBox.setVisible(false);
+        votingComboBox.setEnabled(false);
+        votingComboBox.setModel(new DefaultComboBoxModel());
 
         title = (String) UCVComboBox.getModel().getSelectedItem();
         switch (title) {
             case "Users": {
-                votingComboBox.setVisible(false);
 
                 try {
-                    votingComboBox.setEnabled(false);
-                    jList1.setModel(new javax.swing.AbstractListModel() {
-                        String[] strings = userService.getUserArray();
-
-                        public int getSize() {
-                            return strings.length;
-                        }
-
-                        public Object getElementAt(int i) {
-                            return strings[i];
-                        }
-                    });
-                    votingComboBox.setModel(new javax.swing.DefaultComboBoxModel());
-                    votingComboBox.setEnabled(false);
+                    refreshJListAbstractListModel(userService.getUserArray());
                     break;
                 } catch (NullPointerException | ListIsEmpty | SQLException e) {
-                    jList1.setModel(new javax.swing.AbstractListModel() {
-                        String[] strings = {""};
-
-                        public int getSize() {
-                            return strings.length;
-                        }
-
-                        public Object getElementAt(int i) {
-                            return strings[i];
-                        }
-                    });
+                    jList1.setModel(new DefaultListModel());
                     break;
                 }
             }
             case "Candidates": {
-                votingComboBox.setVisible(false);
-
                 try {
-                    votingComboBox.setEnabled(false);
-                    jList1.setModel(new javax.swing.AbstractListModel() {
-                        String[] strings = userService.getCandidateArray();
-
-                        public int getSize() {
-                            return strings.length;
-                        }
-
-                        public Object getElementAt(int i) {
-                            return strings[i];
-                        }
-                    });
-                    votingComboBox.setModel(new javax.swing.DefaultComboBoxModel());
-                    votingComboBox.setEnabled(false);
+                    refreshJListAbstractListModel(userService.getCandidateArray());
                     break;
                 } catch (NullPointerException | ListIsEmpty | SQLException e) {
-                    jList1.setModel(new javax.swing.AbstractListModel() {
-                        String[] strings = {""};
-
-                        public int getSize() {
-                            return strings.length;
-                        }
-
-                        public Object getElementAt(int i) {
-                            return strings[i];
-                        }
-                    });
+                    setDefaultJListModel();
                     break;
                 }
             }
             case "History": {
-                votingComboBox.setVisible(false);
-
                 try {
-                    System.out.println("fist try");
-                    votingComboBox.setEnabled(false);
-                    jList1.setModel(new javax.swing.AbstractListModel() {
-                        String[] strings = historyService.getHistoryArray();
-
-                        public int getSize() {
-                            return strings.length;
-                        }
-
-                        public Object getElementAt(int i) {
-                            return strings[i];
-                        }
-                    });
-                    votingComboBox.setModel(new javax.swing.DefaultComboBoxModel());
-                    votingComboBox.setEnabled(false);
+                    refreshJListAbstractListModel(historyService.getHistoryArray());
                     break;
                 } catch (NullPointerException | ListIsEmpty | SQLException e) {
-                    System.out.println("catch");
-                    jList1.setModel(new javax.swing.DefaultListModel());
-//                    jList1.setModel(new javax.swing.AbstractListModel() {
-//                        String[] strings = {""};
-//
-//                        public int getSize() {
-//                            return strings.length;
-//                        }
-//
-//                        public Object getElementAt(int i) {
-//                            return strings[i];
-//                        }
-//                    });
-                    votingComboBox.setModel(new javax.swing.DefaultComboBoxModel());
-                    votingComboBox.setEnabled(false);
+                    setDefaultJListModel();
                     break;
                 }
             }
             case "Votions": {
                 votingComboBox.setVisible(true);
-
+                votingComboBox.setEnabled(true);
                 votingTitle = "*All*";
                 try {
-                    jList1.setModel(new javax.swing.AbstractListModel() {
-                        String[] strings = votingService.getVotingArray();
-
-                        //                    String[] strings = votionService.getAll().;
-                        public int getSize() {
-                            return strings.length;
-                        }
-
-                        public Object getElementAt(int i) {
-                            return strings[i];
-                        }
-                    });//TODO default List Model
-
+                    refreshJListAbstractListModel(votingService.getVotingArray());
+                    updateVotingComboBox();
+                } catch (SQLException | ListIsEmpty e) {
+                    setDefaultJListModel();
                     votingComboBox.setModel(
-                            new javax.swing.DefaultComboBoxModel(
-                                    votingService.getVotingTitleArrayWithNull()
-                            )
-                    );
-                }catch (SQLException | ListIsEmpty e){
-                    jList1.setModel(new javax.swing.DefaultListModel());
-                    votingComboBox.setModel(
-                            new javax.swing.DefaultComboBoxModel(
+                            new DefaultComboBoxModel(
                                     new String[]{"*All*"}
                             )
                     );
 
                 }
-                votingComboBox.setEnabled(true);
                 break;
             }
             default:
@@ -329,86 +238,32 @@ public class AdminMenu extends BaseMenuFrame {
         }
     }
 
+
     private void votingComboBoxActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             votingTitle = (String) votingComboBox.getModel().getSelectedItem();
             if (votingTitle.equals("*All*")) {
-                jList1.setModel(new javax.swing.AbstractListModel() {
-                    String[] strings = votingService.getVotingArray();
-
-                    public int getSize() {
-                        return strings.length;
-                    }
-
-                    public Object getElementAt(int i) {
-                        return strings[i];
-                    }
-                });
+                refreshJListAbstractListModel(votingService.getVotingArray());
             } else {
-                jList1.setModel(new javax.swing.AbstractListModel() {
-                    String[] strings = userService.getCandidateNameArray(
-                            votingService.getVotingCandidateList(
-                                    votingService.getCandidateByName(votingTitle).getId()));
-
-                    public int getSize() {
-                        return strings.length;
-                    }
-
-                    public Object getElementAt(int i) {
-                        return strings[i];
-                    }
-                });
+                refreshJListAbstractListModel(
+                        userService.getCandidateNameArray(
+                                votingService.getVotingCandidateList(
+                                        votingService.getCandidateByName(votingTitle).getId())));
             }
         } catch (NullPointerException | ListIsEmpty e) {
-            jList1.setModel(new javax.swing.DefaultListModel()
-//            {
-//                String[] strings = {""};
-//
-//                public int getSize() {
-//                    return strings.length;
-//                }
-//
-//                public Object getElementAt(int i) {
-//                    return strings[i];
-//                }
-//            });
-            );
+            setDefaultJListModel();
         } catch (SQLException | UserNotFound | VotingNotFound ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Output", JOptionPane.PLAIN_MESSAGE);
+            showMessage(ex.getMessage(), messageDialogTitle);
         }
 
     }
 
-    public static void main(String args[]) {
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new AdminMenu(new User(0, "name", "log", "pass", ("USER"))).setVisible(true);
-                } catch (SQLException | ListIsEmpty ex) {
-                }
-            }
-        });
-    }
-
-    private javax.swing.JButton logOffButton;
-    private javax.swing.JButton addButton;
-    private javax.swing.JButton deleteButton;
-    private javax.swing.JButton editButton;
-    private javax.swing.JButton resultsButton;
-    private javax.swing.JComboBox votingComboBox;
-    private javax.swing.JComboBox UCVComboBox;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JList jList1;
-    private javax.swing.JScrollPane jScrollPane1;
-
     public void update() {
-            this.UCHVComboBoxActionPerformed(new java.awt.event.ActionEvent(new Object(), 0, title));
+        this.UCHVComboBoxActionPerformed(new java.awt.event.ActionEvent(new Object(), 0, title));
     }
 
     public void updateVoting() {
-        System.out.println("voting update");
-            this.votingComboBoxActionPerformed(new java.awt.event.ActionEvent(new Object(), 0, votingTitle));
+        this.votingComboBoxActionPerformed(new java.awt.event.ActionEvent(new Object(), 0, votingTitle));
     }
 
     public void updateVotingComboBox() throws ListIsEmpty, SQLException {
@@ -419,6 +274,23 @@ public class AdminMenu extends BaseMenuFrame {
         );
     }
 
+    private void refreshJListAbstractListModel(final String[] array) throws ListIsEmpty, SQLException {
+        jList1.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = array;
+
+            public int getSize() {
+                return strings.length;
+            }
+
+            public Object getElementAt(int i) {
+                return strings[i];
+            }
+        });
+    }
+
+    private void setDefaultJListModel() {
+        jList1.setModel(new DefaultListModel());
+    }
 
     @SuppressWarnings("unchecked")
     private void initComponents() throws SQLException, ListIsEmpty {
@@ -439,12 +311,17 @@ public class AdminMenu extends BaseMenuFrame {
         votingComboBox.setEnabled(false);
         votingComboBox.setVisible(false);
 
+        logOffButton.setText("Log off");
+        addButton.setText("ADD");
+        deleteButton.setText("DELETE");
+        editButton.setText("EDIT");
+        resultsButton.setText("RESULTS");
+
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("You are logged as : " + currentUser.getName());
 
-        logOffButton.setText("Log off");
         logOffButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 logOffButtonActionPerformed(evt);
@@ -452,58 +329,46 @@ public class AdminMenu extends BaseMenuFrame {
 
         });
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-
-            String[] strings = userService.getUserArray();
-
-            public int getSize() {
-                return strings.length;
-            }
-
-            public Object getElementAt(int i) {
-                return strings[i];
-            }
-        });
+        refreshJListAbstractListModel(userService.getUserArray());
         jScrollPane1.setViewportView(jList1);
 
         UCVComboBox.setModel(new javax.swing.DefaultComboBoxModel(
-                        new String[]{"Users", "Candidates", "History", "Votions"})
+            new String[]{
+
+                    Models.Users.name(),
+                    Models.Candidates.name(),
+                    Models.History.name(),
+                    Models.Votions.name()
+            })
         );
+        votingComboBox.setModel(new javax.swing.DefaultComboBoxModel());
+
+
         UCVComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    UCHVComboBoxActionPerformed(evt);
+                UCHVComboBoxActionPerformed(evt);
             }
         });
-
-        addButton.setText("ADD");
         addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addButtonActionPerformed(evt);
             }
         });
-
-        deleteButton.setText("DELETE");
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteButtonActionPerformed(evt);
             }
         });
-
-        editButton.setText("EDIT");
         editButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editButtonActionPerformed(evt);
             }
         });
-
-        resultsButton.setText("RESULTS");
         resultsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 resultsButtonActionPerformed(evt);
             }
         });
-
-        votingComboBox.setModel(new javax.swing.DefaultComboBoxModel());
         votingComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 votingComboBoxActionPerformed(evt);

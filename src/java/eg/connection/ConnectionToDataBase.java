@@ -33,8 +33,7 @@ public final class ConnectionToDataBase {
         return db;
     }
 
-    public ResultSet query(String query) throws SQLException{
-
+    public ResultSet selectFrom(String query) throws SQLException{
         ResultSet res = statement.executeQuery("select * from "+query);
         return res;
     }
@@ -49,8 +48,7 @@ public final class ConnectionToDataBase {
         return rs;
     }
 
-    public ResultSet go(String text) throws SQLException {
-        ResultSet rs = statement.executeQuery(text);
-        return rs;
+    public void go(String text) throws SQLException {
+        boolean rs = statement.execute(text);
     }
 }

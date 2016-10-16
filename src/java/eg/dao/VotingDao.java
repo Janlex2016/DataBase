@@ -8,11 +8,12 @@ import java.util.List;
 
 public interface VotingDao extends BaseOperations<Voting> {
     
-    public void addCandidateToVoting(History v) throws SQLException;
-    public void deleteCandidateFromVotion(int candidateId, int votionId) throws SQLException;
-    public void addCandidateList(Voting voting, List<User> list) throws SQLException;
-    public Voting getByName(String name) throws SQLException;
-    public List<History> getVotingWithCandidatesList(int votionId) throws SQLException;
-    public void deleteCandidateById(int id) throws SQLException;
+    void addCandidateToVoting(History v) throws SQLException;
+    void deleteCandidateFromVoting(int candidateId, int votionId) throws SQLException;
+    void addCandidateList(Voting voting, List<User> list) throws SQLException;
+    Voting getByName(String name) throws SQLException;
+    List<History> getVotingWithCandidatesList(int votionId) throws SQLException;
+    void deleteCandidateById(int id) throws SQLException;
+    List<History> getResults(int votingId) throws SQLException;
 
 }

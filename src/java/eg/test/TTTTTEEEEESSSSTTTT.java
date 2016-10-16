@@ -56,7 +56,7 @@ public class TTTTTEEEEESSSSTTTT {
 //     *******************************************************   
         try{
             System.out.println("Za Kabzona! - Kandidaty"); 
-            List<User> clist = votionService.getUserById(15).getCandidates();
+            List<User> clist = votionService.getById(15).getCandidates();
 
             for(User user:clist){
                 System.out.print(user.getId()+" : ");
@@ -88,7 +88,7 @@ public class TTTTTEEEEESSSSTTTT {
         try{
             List<History> vwclist = historyService.countVoices(14);
             for(History vwc:vwclist){
-                System.out.print("can : "+userService.getUserById(vwc.getCandidateId()).getName());
+                System.out.print("can : "+userService.getById(vwc.getCandidateId()).getName());
                 System.out.println(", "+vwc.getVotionId()+" голосов");
             }
         }catch(UserNotFound e){

@@ -9,15 +9,15 @@ public class HistoryAddFrame extends BaseAddFrame {
 
     private static final String titleText = "History add menu";
     private static final String candidateLabelText = "Candidate id";
-    private static final String votionLabelText = "Votion id";
+    private static final String votingLabelText = "Voting id";
     private static final String userLabelText = "User id";
     private javax.swing.JTextField candidateIdField;
-    private javax.swing.JTextField votionIdField;
+    private javax.swing.JTextField votingIdField;
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {
 
         try {
-            historyService.add(Integer.parseInt(candidateIdField.getText()), Integer.parseInt(votionIdField.getText()), Integer.parseInt(votionIdField.getText()));
+            historyService.add(Integer.parseInt(candidateIdField.getText()), Integer.parseInt(votingIdField.getText()), Integer.parseInt(votingIdField.getText()));
         } catch (SQLException | AccessDenied | CandidateNotFound | UserNotFound | VotingNotFound | IncorrectInput ex) {
             showMessage(ex.getMessage(), messageDialogTitle);
         } catch (Exception ex) {
@@ -37,19 +37,19 @@ public class HistoryAddFrame extends BaseAddFrame {
 
         this.setBounds(500, 250, 500, 300);
         javax.swing.JLabel titleMessage = new javax.swing.JLabel();
-        javax.swing.JLabel votionIdLabel = new javax.swing.JLabel();
+        javax.swing.JLabel votingIdLabel = new javax.swing.JLabel();
         javax.swing.JLabel userIdLabel = new javax.swing.JLabel();
         javax.swing.JLabel candidateIdLabel = new javax.swing.JLabel();
         javax.swing.JButton addButton = new javax.swing.JButton();
         javax.swing.JButton cancelButton = new javax.swing.JButton();
         candidateIdField = new javax.swing.JTextField();
-        votionIdField = new javax.swing.JTextField();
+        votingIdField = new javax.swing.JTextField();
         javax.swing.JTextField userIdField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         titleMessage.setText(titleText);
-        votionIdLabel.setText(votionLabelText);
+        votingIdLabel.setText(votingLabelText);
         userIdLabel.setText(userLabelText);
         candidateIdLabel.setText(candidateLabelText);
         addButton.setText(addButtonText);
@@ -84,11 +84,11 @@ public class HistoryAddFrame extends BaseAddFrame {
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                         .addComponent(candidateIdLabel)
                                                         .addComponent(userIdLabel)
-                                                        .addComponent(votionIdLabel))
+                                                        .addComponent(votingIdLabel))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                         .addComponent(candidateIdField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
-                                                        .addComponent(votionIdField, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addComponent(votingIdField, javax.swing.GroupLayout.Alignment.TRAILING)
                                                         .addComponent(userIdField, javax.swing.GroupLayout.Alignment.TRAILING))))
                                 .addGap(46, 46, 46))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -103,11 +103,11 @@ public class HistoryAddFrame extends BaseAddFrame {
                                 .addComponent(titleMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(votionIdLabel)
+                                        .addComponent(votingIdLabel)
                                         .addComponent(candidateIdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(15, 15, 15)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(votionIdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(votingIdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(userIdLabel))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
