@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package eg.menu;
 
 import eg.exceptions.AccessDenied;
@@ -13,11 +8,9 @@ import eg.exceptions.ListIsEmpty;
 import eg.exceptions.UserNotFound;
 import eg.exceptions.VotingNotFound;
 import eg.models.User;
-import eg.models.enums.Models;
 
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
-import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
 
 public class AdminMenu extends BaseMenuFrame {
@@ -111,6 +104,7 @@ public class AdminMenu extends BaseMenuFrame {
                     break;
                 }
                 case "Votions": {
+                    System.out.println(votingTitle);
                     if (votingTitle.equals("*All*")) {
                         try {
                             votingService.deleteById(getSelectedIndex());
@@ -135,8 +129,11 @@ public class AdminMenu extends BaseMenuFrame {
         }
 
         if (votingComboBox.isVisible()) {
+            System.out.println("updated"+votingTitle);
             updateVoting();
-        } else update();
+        } else {
+            update();
+        }
     }
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -217,11 +214,14 @@ public class AdminMenu extends BaseMenuFrame {
     }
 
     public void updateVotingComboBox() throws ListIsEmpty, SQLException {
+        String tempTitle = votingTitle;
         votingComboBox.setModel(
                 new javax.swing.DefaultComboBoxModel(
                         votingService.getVotingTitleArrayWithNull()
                 )
         );
+        votingTitle = tempTitle;
+        votingComboBox.getModel().setSelectedItem(tempTitle);
     }
 
     public void setDefaultVotingComboBox() {
@@ -292,10 +292,10 @@ public class AdminMenu extends BaseMenuFrame {
 
         UCVComboBox.setModel(new javax.swing.DefaultComboBoxModel(
                         new String[]{
-                                Models.Users.name(),
-                                Models.Candidates.name(),
-                                Models.History.name(),
-                                Models.Votions.name()
+                                "Users",
+                                "Candidates",
+                                "History",
+                                "Votions"
                         })
         );
         votingComboBox.setModel(new javax.swing.DefaultComboBoxModel());
