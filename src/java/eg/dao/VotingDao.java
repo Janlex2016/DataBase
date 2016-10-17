@@ -15,5 +15,6 @@ public interface VotingDao extends BaseOperations<Voting> {
     List<History> getVotingWithCandidatesList(int votionId) throws SQLException;
     void deleteCandidateById(int id) throws SQLException;
     List<History> getResults(int votingId) throws SQLException;
+    List<String> getCandidatesDedicatedToVoting(String votingTitle) throws SQLException;
 
 }

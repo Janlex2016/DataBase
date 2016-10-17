@@ -108,15 +108,7 @@ public class UserServiceImpl implements UserService{
         if(user.getAccess()!=Access.CANDIDATE) throw new AccessDenied();
         return user;
     }
-//
-//    @Override
-//    public User getAdminById(int userId) throws SQLException,UserNotFound,AccessDenied{
-//        User user = userDao.getById(userId);
-//        if(user==null) throw new UserNotFound();
-//        if(user.getAccess()!=Access.ADMIN) throw new AccessDenied();
-//        return user;
-//    }
-    
+
     @Override
     public User getById(int id) throws SQLException,UserNotFound{
         User user = userDao.getById(id);

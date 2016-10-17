@@ -37,4 +37,14 @@ public class ListToNameArray {
         }
         return nameArray;
     }
+
+    public static  String[] getCandidatesDedicatedToVotingArray(List<String> list){
+
+        nameArray = new String[list.size()];
+
+        for (int i = 0; i < nameArray.length; i++) {
+            nameArray[i] = list.get(i);
+        }
+        return nameArray;
+    }
 }

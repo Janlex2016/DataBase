@@ -92,13 +92,18 @@ public class VotingDaoImpl implements VotingDao {
 
     @Override
     public List<History> getResults(int votingId) throws SQLException{
-
-        List<History> resultList = new ArrayList<>();
         ResultSet rs = ConnectionToDataBase.getConnection().insertText(
                 "CALL VotingDataBase.GET_RESULTS_WITH_VOTING_ID(" + votingId + ");"
         );
-        resultList = ListConverter.convertResultSetToVotingResultList(rs);
-        return resultList;
+        return ListConverter.convertResultSetToVotingResultList(rs);
+    }
+
+    @Override
+    public List<String> getCandidatesDedicatedToVoting(String votingTitle) throws SQLException {
+        ResultSet rs = ConnectionToDataBase.getConnection().insertText(
+                "CALL VotingDataBase.GET_CANDIDATE_NAMES_DEDICATED_TO_VOTING(\'"+votingTitle+"\');"
+        );
+        return ListConverter.convertResultSetToDedicatedCandidatesList(rs);
     }
 
 }

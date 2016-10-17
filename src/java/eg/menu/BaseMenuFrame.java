@@ -24,25 +24,6 @@ public class BaseMenuFrame extends JFrame {
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.PLAIN_MESSAGE);
     }
 
-    protected void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        dispose();
-    }
-
-//    protected AbstractListModel createModel(final String[] strings){
-//
-//        return new AbstractListModel() {
-//            @Override
-//            public int getSize() {
-//                return strings.length;
-//            }
-//
-//            @Override
-//            public Object getElementAt(int index) {
-//                return strings[index];
-//            }
-//        };
-//    }
-
     protected void logOffButtonActionPerformed(java.awt.event.ActionEvent evt) {
         currentUser = null;
         this.dispose();

@@ -85,4 +85,14 @@ public class ListConverter {
         }
         return resultsList;
     }
+
+    public static List<String> convertResultSetToDedicatedCandidatesList(ResultSet rs) throws SQLException {
+        List<String> resultsList = new ArrayList<>();
+        if(!rs.first()) return null;
+        rs.previous();
+        while(rs.next()){
+            resultsList.add(rs.getString("NAME"));
+        }
+        return resultsList;
+    }
 }
