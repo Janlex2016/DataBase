@@ -17,6 +17,7 @@ public interface UserService {
     void addCandidate(String name, String access) throws SQLException, IncorrectInput;
     void deleteCandidateById(int candidateId) throws SQLException;
     User getUserById(int userId) throws SQLException, UserNotFound, AccessDenied;
+    User getUserByName(String name) throws SQLException,AccessDenied,UserNotFound;
     User getCandidateById(int userId) throws SQLException, CandidateNotFound, AccessDenied;
     User getCandidateByName(String name) throws SQLException, CandidateNotFound, AccessDenied;
     User enter(String login, String password) throws SQLException, UserNotFound, ListIsEmpty;

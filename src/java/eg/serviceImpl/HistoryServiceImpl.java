@@ -77,7 +77,7 @@ public class HistoryServiceImpl implements HistoryService{
         
         List<User> ulist = new ArrayList<>();
         for(History h:hlist){
-            ulist.add(new User(h.getHistoryId(), userDao.getCandidateById(h.getCandidateId()).getName(), votingDao.getById(h.getVotionId()).getTitle(), userDao.getById(h.getUserId()).getName(), "USER"));
+            ulist.add(new User(h.getHistoryId(), userDao.getCandidateById(h.getCandidateId()).getName(), votingDao.getById(h.getVotingId()).getTitle(), userDao.getById(h.getUserId()).getName(), "USER"));
         }
         
         return ulist;

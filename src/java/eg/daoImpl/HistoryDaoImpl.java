@@ -19,7 +19,7 @@ public class HistoryDaoImpl implements HistoryDao{
     @Override
     public void add(History history) throws SQLException{
         String insert = String.format(
-                "INSERT INTO HISTORY (id, CANDIDATE_ID, VOTING_ID, USER_ID) VALUES ('%1$s','%2$s', '%3$s', '%4$s');", history.getHistoryId(), history.getCandidateId(),history.getVotionId(),history.getUserId());
+                "INSERT INTO HISTORY (id, CANDIDATE_ID, VOTING_ID, USER_ID) VALUES ('%1$s','%2$s', '%3$s', '%4$s');", history.getHistoryId(), history.getCandidateId(),history.getVotingId(),history.getUserId());
         ConnectionToDataBase.getConnection().insert(insert);
     }
 

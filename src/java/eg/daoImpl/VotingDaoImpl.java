@@ -15,7 +15,6 @@ import eg.models.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class VotingDaoImpl implements VotingDao {
@@ -38,9 +37,9 @@ public class VotingDaoImpl implements VotingDao {
 
     @Override
     public void addCandidateToVoting(History v) throws SQLException {
-        String input = String.format("INSERT INTO VOTING_CANDIDATES (ID, CANDIDATE_ID, VOTING_ID) VALUES ('%1$d','%2$d' , '%3$d');", v.getHistoryId(), v.getCandidateId(), v.getVotionId());
+        String input = String.format("INSERT INTO VOTING_CANDIDATES (ID, CANDIDATE_ID, VOTING_ID) VALUES ('%1$d','%2$d' , '%3$d');", v.getHistoryId(), v.getCandidateId(), v.getVotingId());
         ConnectionToDataBase.getConnection().insert(input);
-//        ConnectionToDataBase.getConnection().insert("INSERT INTO VotionTab (id, CandidateId, VotionId) VALUES ('"+v.getHistoryId()+"','"+v.getCandidateId()+"' , '"+v.getVotionId()+"');");    
+//        ConnectionToDataBase.getConnection().insert("INSERT INTO VotionTab (id, CandidateId, VotionId) VALUES ('"+v.getHistoryId()+"','"+v.getCandidateId()+"' , '"+v.getVotingId()+"');");
     }
 
     @Override

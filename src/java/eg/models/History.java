@@ -5,16 +5,16 @@ public class History {
     private int historyId;
     private int userId;
     private int candidateId;
-    private int votionId;
+    private int votingId;
 
     public History() {
     }
 
-    public History(int id, int candidateId, int votionId, int userId) {
+    public History(int id, int candidateId, int votingId, int userId) {
         this.historyId = id;
         this.userId = userId;
         this.candidateId = candidateId;
-        this.votionId = votionId;
+        this.votingId = votingId;
     }
 
     public int getCandidateId() {
@@ -29,8 +29,8 @@ public class History {
         return userId;
     }
 
-    public int getVotionId() {
-        return votionId;
+    public int getVotingId() {
+        return votingId;
     }
 
     public void setCandidateId(int candidateId) {
@@ -45,7 +45,7 @@ public class History {
         this.userId = userId;
     }
 
-    public void setVotionId(int votionId) {
-        this.votionId = votionId;
+    public void setVotingId(int votingId) {
+        this.votingId = votingId;
     }
 }

@@ -110,6 +110,14 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User getUserByName(String name) throws SQLException,AccessDenied,UserNotFound {
+        User user = userDao.getByName(name);
+        if(user==null) throw new UserNotFound();
+        if(user.getAccess()!=Access.USER) throw new AccessDenied();
+        return user;
+    }
+
+    @Override
     public User getById(int id) throws SQLException,UserNotFound{
         User user = userDao.getById(id);
         if(user==null) throw new UserNotFound();

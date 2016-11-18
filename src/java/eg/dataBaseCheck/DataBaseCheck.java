@@ -52,7 +52,7 @@ public class DataBaseCheck {
                 "CREATE TABLE USERS\n" +
                 "(\n" +
                 "ID Integer PRIMARY KEY AUTO_INCREMENT,\n" +
-                "NAME varchar(40) NOT NULL,\n" +
+                "NAME varchar(40) NOT NULL UNIQUE,\n" +
                 "LOGIN varchar(40) NOT NULL UNIQUE ,\n" +
                 "PASSWORD varchar(40) NOT NULL,\n" +
                 "ACCESS varchar(40) NOT NULL\n" +
